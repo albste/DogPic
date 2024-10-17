@@ -1,6 +1,7 @@
 import 'package:dogpic/components/home_page/search_card.dart';
 import 'package:dogpic/components/home_page/top_rectangle.dart';
 import 'package:dogpic/utils/colors.dart';
+import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
 import 'result_page.dart'; // Import the ResultPage
 
@@ -22,10 +23,9 @@ class _HomePageState extends State<HomePage> {
     final double topRectangleHeight = screenHeight * 0.25;
 
     // Set the max width for the card
-    final double maxCardWidth = 400;
-    final double cardWidth = screenWidth > maxCardWidth
-        ? maxCardWidth
-        : screenWidth - 40; // With 20px margin on both sides
+    final double cardWidth =
+        SizeCalculator.LargeContainerWidthCalculator(screenWidth);
+
     return Scaffold(
         appBar: null,
         backgroundColor: AppColors.pageBackground,

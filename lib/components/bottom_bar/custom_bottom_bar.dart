@@ -1,4 +1,5 @@
 import 'package:dogpic/utils/colors.dart';
+import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,10 +21,8 @@ class CustomBottomBar extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Calculate the maximum available width for the bottom bar
-    final double maxBarWidth = 400;
-    final double barWidth = screenWidth > maxBarWidth
-        ? maxBarWidth
-        : screenWidth - 40; // With 20px margins on each side
+    final double barWidth =
+        SizeCalculator.LargeContainerWidthCalculator(screenWidth);
 
     // Calculate dynamic margins based on the width
     final double sideMargin = (screenWidth - barWidth) / 2;
