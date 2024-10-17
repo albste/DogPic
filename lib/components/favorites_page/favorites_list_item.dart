@@ -1,5 +1,8 @@
 import 'package:dogpic/models/favorites_list_model.dart';
+import 'package:dogpic/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FavoritesListItem extends StatefulWidget {
   final FavoritesListModel item;
@@ -16,7 +19,7 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+      padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 18, right: 20),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -31,20 +34,38 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
           ],
         ),
         child: ListTile(
-          leading: Icon(Icons.pets, color: Colors.blue),
+          leading: SvgPicture.asset(
+            'lib/assets/svgs/dogpic_only_image_dark.svg',
+            height: 20,
+          ),
           title: Text(widget.item.title,
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: GoogleFonts.openSans(
+                textStyle: TextStyle(
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                  color: AppColors.primaryForeground,
+                ),
+              )),
           subtitle:
-              Text('${widget.item.selectedBreedIds.length} breeds selected'),
+              Text('${widget.item.selectedBreedIds.length} breeds selected',
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                      color: AppColors.primaryForeground,
+                    ),
+                  )),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: Icon(Icons.edit, color: Colors.blue),
+                icon: Icon(Icons.edit, color: AppColors.primary),
                 onPressed: () => widget.onEdit(widget.item.id),
               ),
               IconButton(
-                icon: Icon(Icons.close, color: Colors.blue),
+                icon: Icon(Icons.close, color: AppColors.primary),
                 onPressed: () => widget.onDelete(widget.item.id),
               ),
             ],

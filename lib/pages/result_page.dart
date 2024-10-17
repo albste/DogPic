@@ -1,7 +1,9 @@
 import 'package:dogpic/components/result_page/image_card.dart';
 import 'package:dogpic/utils/colors.dart';
+import 'package:dogpic/utils/dictionary.dart';
 import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ResultPage extends StatelessWidget {
@@ -32,16 +34,17 @@ class ResultPage extends StatelessWidget {
             padding: EdgeInsets.only(top: 20),
             child: Row(
               children: [
-                Icon(Icons.search, color: Colors.blue, size: 40),
+                Icon(Icons.search, color: AppColors.primary, size: 30),
                 SizedBox(width: 10),
-                Text(
-                  'Search results:',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue[900],
-                  ),
-                ),
+                Text(Dictionary.result_page_title,
+                    style: GoogleFonts.openSans(
+                      textStyle: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        color: AppColors.primaryForeground,
+                      ),
+                    )),
               ],
             ),
           ),
@@ -67,21 +70,22 @@ class ResultPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.search, color: Colors.white, size: 30),
-                    SizedBox(width: 10),
-                    Text(
-                      'New search',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    const Icon(Icons.search, color: Colors.white, size: 23),
+                    const SizedBox(width: 10),
+                    Text(Dictionary.result_page_new_search_button,
+                        style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: AppColors.secondaryForeground,
+                          ),
+                        )),
                   ],
                 ),
               ),

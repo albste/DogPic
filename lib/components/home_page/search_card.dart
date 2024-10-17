@@ -2,6 +2,7 @@ import 'package:dogpic/components/general/dropdown_with_title.dart';
 import 'package:dogpic/components/general/switch_with_title.dart';
 import 'package:dogpic/models/search_settings_model.dart';
 import 'package:dogpic/utils/colors.dart';
+import 'package:dogpic/utils/dictionary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -75,7 +76,7 @@ class _SearchCardState extends State<SearchCard> {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  'Search dogs pictures',
+                  Dictionary.search_card_title,
                   style: GoogleFonts.openSans(
                     textStyle: TextStyle(
                       decoration: TextDecoration.none,
@@ -101,7 +102,7 @@ class _SearchCardState extends State<SearchCard> {
                     Duration(milliseconds: switchAnimationEnabled ? 300 : 0),
                 child: useFavoriteList
                     ? DropdownWithTitle(
-                        title: 'Favorite list to use',
+                        title: Dictionary.search_card_favorite_list,
                         selectedValue: favoriteList,
                         items: favoriteLists,
                         onChanged: (newValue) {
@@ -114,7 +115,7 @@ class _SearchCardState extends State<SearchCard> {
                     : Column(
                         children: [
                           DropdownWithTitle(
-                            title: 'Breed',
+                            title: Dictionary.search_card_breed,
                             selectedValue: selectedBreed,
                             items: breeds,
                             onChanged: (newValue) {
@@ -126,7 +127,7 @@ class _SearchCardState extends State<SearchCard> {
                           ),
                           SizedBox(height: 20),
                           DropdownWithTitle(
-                            title: 'Sub Breed',
+                            title: Dictionary.search_card_subbreed,
                             selectedValue: selectedSubBreed,
                             items: subbreeds,
                             onChanged: (newValue) {
@@ -141,7 +142,7 @@ class _SearchCardState extends State<SearchCard> {
             SizedBox(height: 20),
             // Use Favorite List Switch
             SwitchWithTitle(
-              title: 'Use a favorite list',
+              title: Dictionary.search_card_favorite_list_switch,
               value: useFavoriteList,
               onChanged: (newValue) {
                 setState(() {
@@ -151,7 +152,7 @@ class _SearchCardState extends State<SearchCard> {
             ),
             SizedBox(height: 10),
             SwitchWithTitle(
-              title: 'Random images',
+              title: Dictionary.search_card_random_images_switch,
               value: randomImages,
               onChanged: (newValue) {
                 setState(() {

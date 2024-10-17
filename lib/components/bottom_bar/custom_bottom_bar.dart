@@ -77,7 +77,7 @@ class CustomBottomBar extends StatelessWidget {
       inactiveColor: AppColors.primary.withOpacity(0.6),
       icon: MouseRegion(
         cursor: SystemMouseCursors.click, // Change cursor to hand
-        child: Icon(icon, size: 23),
+        child: Icon(icon, size: 26),
       ),
       title: MouseRegion(
         cursor: SystemMouseCursors.click, // Change cursor to hand
@@ -88,7 +88,7 @@ class CustomBottomBar extends StatelessWidget {
             textStyle: const TextStyle(
               decoration: TextDecoration.none,
               fontWeight: FontWeight.w700,
-              fontSize: 14,
+              fontSize: 16,
             ),
           ),
         ),

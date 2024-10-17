@@ -1,5 +1,6 @@
 import 'package:dogpic/models/dog_breed_model.dart';
 import 'package:dogpic/models/dog_subbreed_model.dart';
+import 'package:dogpic/utils/dictionary.dart';
 import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
 
@@ -36,11 +37,11 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('EDIT LIST'),
+          Text(Dictionary.favorites_page_edit_dialog_title),
           TextField(
             decoration: InputDecoration(
-              labelText: 'Title',
-              hintText: 'Enter a title..',
+              labelText: '',
+              hintText: Dictionary.favorites_page_enter_title_placeholder,
             ),
             onChanged: (value) {
               setState(() {
@@ -70,7 +71,7 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
                   Navigator.of(context)
                       .pop(); // Assuming you still want to close it
                 },
-                child: Text('CANCEL'),
+                child: Text(Dictionary.cancel),
               ),
               SizedBox(width: 8),
               TextButton(
@@ -80,7 +81,7 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
                         Navigator.of(context).pop(); // Close on save
                       }
                     : null,
-                child: Text('UPDATE'),
+                child: Text(Dictionary.update),
               ),
             ],
           ),

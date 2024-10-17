@@ -3,10 +3,13 @@ import 'package:dogpic/components/favorites_page/edit_favorites_list_dialog.dart
 import 'package:dogpic/models/dog_breed_model.dart';
 import 'package:dogpic/models/dog_subbreed_model.dart';
 import 'package:dogpic/models/favorites_list_model.dart';
+import 'package:dogpic/utils/colors.dart';
+import 'package:dogpic/utils/dictionary.dart';
 import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:dogpic/models/favorites_list_model.dart';
 import 'package:dogpic/components/favorites_page/favorites_list.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FavoritesPage extends StatefulWidget {
   @override
@@ -162,16 +165,18 @@ class _FavoritesPageState extends State<FavoritesPage> {
               padding: EdgeInsets.only(top: 20),
               child: Row(
                 children: [
-                  Icon(Icons.favorite_border, color: Colors.blue, size: 40),
+                  Icon(Icons.favorite_border,
+                      color: AppColors.primary, size: 30),
                   SizedBox(width: 10),
-                  Text(
-                    'Favorites Lists:',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue[900],
-                    ),
-                  ),
+                  Text(Dictionary.favorites_page_title,
+                      style: GoogleFonts.openSans(
+                        textStyle: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          color: AppColors.primaryForeground,
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -204,9 +209,22 @@ class _FavoritesPageState extends State<FavoritesPage> {
               right: 20,
               child: FloatingActionButton(
                 onPressed: _showCreateFavoritesListDialog,
-                backgroundColor: Colors.blue, // Adjust color as needed
-                child: Icon(Icons.add, color: Colors.white),
+                backgroundColor: AppColors.primary,
+                child: Icon(
+                  Icons.add,
+                  size: 30,
+                  color: AppColors.secondaryForeground,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(50), // Rende il bordo rotondo
+                ),
               ),
+              //  FloatingActionButton(
+              //   onPressed: _showCreateFavoritesListDialog,
+              //   backgroundColor: Colors.blue, // Adjust color as needed
+              //   child: Icon(Icons.add, color: Colors.white),
+              // ),
             ),
           ],
         ),
