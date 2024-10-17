@@ -1,7 +1,10 @@
+import 'package:dogpic/components/general/dropdown_with_title.dart';
+import 'package:dogpic/components/general/switch_with_title.dart';
 import 'package:dogpic/models/search_settings_model.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchCard extends StatefulWidget {
   final double width;
@@ -17,12 +20,30 @@ class SearchCard extends StatefulWidget {
 }
 
 class _SearchCardState extends State<SearchCard> {
-  String selectedBreed = 'African';
-  String selectedSubBreed = 'All sub breeds';
   bool useFavoriteList = false;
   bool randomImages = true;
-  String favoriteList = 'List 1';
   bool switchAnimationEnabled = false;
+  String? selectedBreed;
+  String? selectedSubBreed;
+  String? favoriteList;
+
+  final List<String> breeds = ['African', 'Bulldog', 'Labrador', 'Poodle'];
+
+  final List<String> subbreeds = [
+    'All sub breeds',
+    'Sub 1',
+    'Sub 2',
+  ];
+
+  final List<String> favoriteLists = ['List 1', 'List 2', 'List 3'];
+
+  @override
+  void initState() {
+    super.initState();
+    selectedBreed = breeds[0];
+    selectedSubBreed = subbreeds[0];
+    favoriteList = favoriteLists[0];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,193 +69,113 @@ class _SearchCardState extends State<SearchCard> {
           children: [
             Row(
               children: [
-                Icon(Icons.pets, color: Colors.blue, size: 40),
+                SvgPicture.asset(
+                  'lib/assets/svgs/dogpic_only_image_dark.svg',
+                  height: 40,
+                ),
                 SizedBox(width: 10),
                 Text(
                   'Search dogs pictures',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue[900],
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: AppColors.primaryForeground,
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            Container(
+              margin:
+                  const EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 15),
+              child: Divider(
+                color: AppColors.primary,
+                thickness: 0.5,
+              ),
+            ),
             // AnimatedSwitcher for dropdowns
             AnimatedSwitcher(
-              duration:
-                  Duration(milliseconds: switchAnimationEnabled ? 300 : 0),
-              child: useFavoriteList
-                  ? Column(
-                      key: ValueKey('favoriteListDropdown'),
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Favorite list to use',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue[900],
+                duration:
+                    Duration(milliseconds: switchAnimationEnabled ? 300 : 0),
+                child: useFavoriteList
+                    ? DropdownWithTitle(
+                        title: 'Favorite list to use',
+                        selectedValue: favoriteList,
+                        items: favoriteLists,
+                        onChanged: (newValue) {
+                          setState(() {
+                            favoriteList =
+                                newValue; // Aggiorna il valore selezionato
+                          });
+                        },
+                      )
+                    : Column(
+                        children: [
+                          DropdownWithTitle(
+                            title: 'Breed',
+                            selectedValue: selectedBreed,
+                            items: breeds,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedBreed =
+                                    newValue; // Aggiorna il valore selezionato
+                              });
+                            },
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        DropdownButtonFormField<String>(
-                          value: favoriteList,
-                          onChanged: (newValue) {
-                            setState(() {
-                              favoriteList = newValue!;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 15),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
+                          SizedBox(height: 20),
+                          DropdownWithTitle(
+                            title: 'Sub Breed',
+                            selectedValue: selectedSubBreed,
+                            items: subbreeds,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedSubBreed =
+                                    newValue; // Aggiorna il valore selezionato
+                              });
+                            },
                           ),
-                          items: <String>['List 1', 'List 2', 'List 3']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      key: ValueKey('breedSubBreedDropdowns'),
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Breed Dropdown
-                        Text(
-                          'Breed',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue[900],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        DropdownButtonFormField<String>(
-                          value: selectedBreed,
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedBreed = newValue!;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 15),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          items: <String>[
-                            'African',
-                            'Bulldog',
-                            'Labrador',
-                            'Poodle'
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                        SizedBox(height: 20),
-                        // Sub Breed Dropdown
-                        Text(
-                          'Sub Breed',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue[900],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        DropdownButtonFormField<String>(
-                          value: selectedSubBreed,
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedSubBreed = newValue!;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 15),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          items: <String>[
-                            'All sub breeds',
-                            'Sub 1',
-                            'Sub 2',
-                            'Sub 3'
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-            ),
+                        ],
+                      )),
             SizedBox(height: 20),
             // Use Favorite List Switch
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Use a favorite list',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blue[900],
-                  ),
-                ),
-                Switch(
-                  value: useFavoriteList,
-                  onChanged: (newValue) {
-                    setState(() {
-                      useFavoriteList = newValue;
-                    });
-                  },
-                  activeColor: Colors.blue[900],
-                ),
-              ],
+            SwitchWithTitle(
+              title: 'Use a favorite list',
+              value: useFavoriteList,
+              onChanged: (newValue) {
+                setState(() {
+                  useFavoriteList = newValue; // Aggiorna lo stato del switch
+                });
+              },
             ),
-            // Random Images Switch
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Random Images',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blue[900],
-                  ),
-                ),
-                Switch(
-                  value: true,
-                  onChanged: (newValue) {
-                    // handle logic for random images switch
-                  },
-                  activeColor: Colors.blue[900],
-                ),
-              ],
+            SizedBox(height: 10),
+            SwitchWithTitle(
+              title: 'Random images',
+              value: randomImages,
+              onChanged: (newValue) {
+                setState(() {
+                  randomImages = newValue; // Aggiorna lo stato del switch
+                });
+              },
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 30),
             // Search Button
             Align(
               alignment: Alignment.centerRight,
               child: FloatingActionButton(
                 onPressed: () =>
                     widget.onSearch(SearchSettingsModel(name: 'name')),
-                backgroundColor: Colors.blue[900],
-                child: Icon(Icons.search, size: 30),
+                backgroundColor: AppColors.primary,
+                child: Icon(
+                  Icons.search,
+                  size: 30,
+                  color: AppColors.secondaryForeground,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(50), // Rende il bordo rotondo
+                ),
               ),
             ),
           ],

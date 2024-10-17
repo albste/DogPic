@@ -37,11 +37,11 @@ class _HomePageState extends State<HomePage> {
         appBar: null,
         backgroundColor: AppColors.pageBackground,
         body: _showResultPage
-            ? ResultPage(onGoHome: () {
+            ? Center(child: ResultPage(onGoHome: () {
                 setState(() {
                   _showResultPage = false; // Change the flag to show HomePage
                 });
-              }) // Pass the callback to go back to HomePage
+              })) // Pass the callback to go back to HomePage
             : SingleChildScrollView(
                 child: Stack(
                   children: [
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                               onSearch: _onSearch,
                             ),
                             //Box to leave empty space on bottom of the page
-                            SizedBox(height: 200)
+                            SizedBox(height: 170)
                           ],
                         )),
                   ],

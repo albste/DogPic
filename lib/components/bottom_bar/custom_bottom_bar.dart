@@ -53,39 +53,43 @@ class CustomBottomBar extends StatelessWidget {
             showElevation: false,
             onItemSelected: onItemSelected, // Selection event
             items: [
-              FlashyTabBarItem(
-                activeColor: AppColors.primary,
-                inactiveColor: AppColors.primary.withOpacity(0.6),
-                icon: Icon(Icons.home_outlined, size: 23),
-                title: Text(
-                  Dictionary.home,
-                  textAlign: TextAlign.left,
-                  style: GoogleFonts.openSans(
-                    textStyle: const TextStyle(
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
+              _buildTabItem(
+                icon: Icons.home_outlined,
+                title: Dictionary.home,
+                index: 0,
               ),
-              FlashyTabBarItem(
-                activeColor: AppColors.primary,
-                inactiveColor: AppColors.primary.withOpacity(0.6),
-                icon: Icon(Icons.favorite_outline),
-                title: Text(
-                  Dictionary.favorites,
-                  textAlign: TextAlign.left,
-                  style: GoogleFonts.openSans(
-                    textStyle: const TextStyle(
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
+              _buildTabItem(
+                icon: Icons.favorite_outline,
+                title: Dictionary.favorites,
+                index: 1,
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  FlashyTabBarItem _buildTabItem(
+      {required IconData icon, required String title, required int index}) {
+    return FlashyTabBarItem(
+      activeColor: AppColors.primary,
+      inactiveColor: AppColors.primary.withOpacity(0.6),
+      icon: MouseRegion(
+        cursor: SystemMouseCursors.click, // Change cursor to hand
+        child: Icon(icon, size: 23),
+      ),
+      title: MouseRegion(
+        cursor: SystemMouseCursors.click, // Change cursor to hand
+        child: Text(
+          title,
+          textAlign: TextAlign.left,
+          style: GoogleFonts.openSans(
+            textStyle: const TextStyle(
+              decoration: TextDecoration.none,
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+            ),
           ),
         ),
       ),
