@@ -3,23 +3,23 @@ import 'package:dogpic/models/dog_subbreed_model.dart';
 import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
 
-class CreateFavoritesListDialog extends StatefulWidget {
+class EditFavoritesListDialog extends StatefulWidget {
   final List<DogBreedModel> breeds;
   final List<DogSubBreedModel> subBreeds;
   final double listHeight;
 
-  CreateFavoritesListDialog({
+  EditFavoritesListDialog({
     required this.breeds,
     required this.subBreeds,
     required this.listHeight,
   });
 
   @override
-  _CreateFavoritesListDialogState createState() =>
-      _CreateFavoritesListDialogState();
+  _EditFavoritesListDialogState createState() =>
+      _EditFavoritesListDialogState();
 }
 
-class _CreateFavoritesListDialogState extends State<CreateFavoritesListDialog> {
+class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
   String _selectedTitle = '';
   int? _selectedBreedId;
   final ScrollController _scrollController = ScrollController();
@@ -36,7 +36,7 @@ class _CreateFavoritesListDialogState extends State<CreateFavoritesListDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('CREATE NEW LIST'),
+          Text('EDIT LIST'),
           TextField(
             decoration: InputDecoration(
               labelText: 'Title',
@@ -80,7 +80,7 @@ class _CreateFavoritesListDialogState extends State<CreateFavoritesListDialog> {
                         Navigator.of(context).pop(); // Close on save
                       }
                     : null,
-                child: Text('SAVE'),
+                child: Text('UPDATE'),
               ),
             ],
           ),

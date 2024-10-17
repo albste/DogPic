@@ -1,10 +1,12 @@
-import 'package:dogpic/models/favorites_list_item_model.dart';
+import 'package:dogpic/models/favorites_list_model.dart';
 import 'package:flutter/material.dart';
 
 class FavoritesListItem extends StatefulWidget {
-  final FavoritesListItemModel item;
-
-  FavoritesListItem({required this.item});
+  final FavoritesListModel item;
+  final Function(int) onEdit;
+  final Function(int) onDelete;
+  FavoritesListItem(
+      {required this.item, required this.onEdit, required this.onDelete});
 
   @override
   _FavoritesListItemState createState() => _FavoritesListItemState();
@@ -22,8 +24,8 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.11),
-              spreadRadius: 5,
-              blurRadius: 20,
+              spreadRadius: 0,
+              blurRadius: 5,
               offset: Offset(0, 0),
             ),
           ],
@@ -39,15 +41,11 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
             children: [
               IconButton(
                 icon: Icon(Icons.edit, color: Colors.blue),
-                onPressed: () {
-                  // Implement edit functionality
-                },
+                onPressed: () => widget.onEdit(widget.item.id),
               ),
               IconButton(
-                icon: Icon(Icons.close, color: Colors.red),
-                onPressed: () {
-                  // Implement delete functionality
-                },
+                icon: Icon(Icons.close, color: Colors.blue),
+                onPressed: () => widget.onDelete(widget.item.id),
               ),
             ],
           ),

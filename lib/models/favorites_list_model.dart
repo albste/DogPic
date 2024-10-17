@@ -1,8 +1,14 @@
-// Model for the List of Items
-import 'package:dogpic/models/favorites_list_item_model.dart';
-
+// Model for a Favorites List Item
 class FavoritesListModel {
-  final List<FavoritesListItemModel> items;
+  final int id;
+  final String title;
+  final List<int> selectedBreedIds;
+  final List<int> selectedSubBreedIds;
 
-  FavoritesListModel({required this.items});
+  FavoritesListModel({
+    required this.id,
+    required this.title,
+    required this.selectedBreedIds,
+    required this.selectedSubBreedIds,
+  });
 }

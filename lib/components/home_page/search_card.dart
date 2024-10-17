@@ -1,13 +1,15 @@
+import 'package:dogpic/models/search_settings_model.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SearchCard extends StatefulWidget {
   final double width;
+  final Function(SearchSettingsModel) onSearch;
 
   const SearchCard({
-    key,
     required this.width,
+    required this.onSearch,
   });
 
   @override
@@ -229,9 +231,8 @@ class _SearchCardState extends State<SearchCard> {
             Align(
               alignment: Alignment.centerRight,
               child: FloatingActionButton(
-                onPressed: () {
-                  // Logica di ricerca
-                },
+                onPressed: () =>
+                    widget.onSearch(SearchSettingsModel(name: 'name')),
                 backgroundColor: Colors.blue[900],
                 child: Icon(Icons.search, size: 30),
               ),

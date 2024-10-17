@@ -12,7 +12,7 @@ class PageContainer extends StatefulWidget {
 class _PageContainerState extends State<PageContainer> {
   int _selectedIndex = 0;
 
-  // Pages
+  // Main Pages
   final List<Widget> _pages = [
     HomePage(),
     FavoritesPage(),
@@ -30,8 +30,17 @@ class _PageContainerState extends State<PageContainer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null, // You can set an AppBar if needed
-      body: _pages[_selectedIndex], // Display the selected page
+      appBar: null, // Remove appbar
+      body: AnimatedSwitcher(
+        duration: Duration(milliseconds: 250), // Animation duration
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation, // Apply fade transition
+            child: child,
+          );
+        },
+        child: _pages[_selectedIndex], // Display the selected page
+      ),
       backgroundColor: AppColors.pageBackground,
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: _selectedIndex,
