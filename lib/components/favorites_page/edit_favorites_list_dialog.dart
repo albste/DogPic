@@ -1,20 +1,24 @@
+import 'package:dogpic/components/favorites_page/favorites_list_form.dart';
 import 'package:dogpic/models/dog_breed_model.dart';
-import 'package:dogpic/models/dog_subbreed_model.dart';
+import 'package:dogpic/providers/breed_notifier.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:dogpic/utils/dictionary.dart';
 import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditFavoritesListDialog extends StatefulWidget {
-  final List<DogBreedModel> breeds;
-  final List<DogSubBreedModel> subBreeds;
+class EditFavoritesListDialog extends ConsumerStatefulWidget {
   final double listHeight;
+  final Function(String newTitle, List<int> newBreedsIds) onEdit;
+  final String initialTitle; // Aggiunto
+  final List<int> initialBreedIds; // Aggiunto
 
   EditFavoritesListDialog({
-    required this.breeds,
-    required this.subBreeds,
     required this.listHeight,
+    required this.onEdit,
+    required this.initialTitle, // Aggiunto
+    required this.initialBreedIds, // Aggiunto
   });
 
   @override
@@ -22,10 +26,30 @@ class EditFavoritesListDialog extends StatefulWidget {
       _EditFavoritesListDialogState();
 }
 
-class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
+class _EditFavoritesListDialogState
+    extends ConsumerState<EditFavoritesListDialog> {
   String _selectedTitle = '';
-  int? _selectedBreedId;
+  List<int> _selectedBreedIds = [];
   final ScrollController _scrollController = ScrollController();
+  List<DogBreedModel> breeds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Carica le razze all'avvio
+    loadBreeds();
+    // Inizializza il titolo e la lista di ID selezionati
+    _selectedTitle = widget.initialTitle; // Aggiunto
+    _selectedBreedIds = List.from(widget.initialBreedIds); // Aggiunto
+  }
+
+  Future<void> loadBreeds() async {
+    final breedList = ref
+        .read(breedNotifierProvider); // Usa il provider per ottenere le razze
+    setState(() {
+      breeds = breedList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,74 +73,26 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
                   color: AppColors.primaryForeground,
                 ),
               )),
-          Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Text(Dictionary.title,
-                  style: GoogleFonts.openSans(
-                    textStyle: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: AppColors.primaryForeground,
-                    ),
-                  ))),
-          TextField(
-            cursorColor: AppColors.primaryForeground,
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(
-                decoration: TextDecoration.none,
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: AppColors.primaryForeground,
-              ),
-            ),
-            decoration: InputDecoration(
-              hintText: Dictionary.favorites_page_enter_title_placeholder,
-              hintStyle: TextStyle(
-                decoration: TextDecoration.none,
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: AppColors.primaryForeground.withOpacity(0.6),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppColors.primary,
-                ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppColors.primary,
-                  width: 2.0,
-                ),
-              ),
-            ),
-            onChanged: (value) {
+          SizedBox(height: 15),
+          FavoritesListForm(
+            selectedTitle: _selectedTitle,
+            onTitleChanged: (title) {
               setState(() {
-                _selectedTitle = value;
+                _selectedTitle = title;
               });
             },
-          ),
-          Padding(
-              padding: EdgeInsets.only(top: 30, bottom: 10),
-              child: Text(Dictionary.breeds,
-                  style: GoogleFonts.openSans(
-                    textStyle: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: AppColors.primaryForeground,
-                    ),
-                  ))),
-          Container(
-            height: widget.listHeight,
-            child: Scrollbar(
-              controller: _scrollController,
-              thumbVisibility: true,
-              child: ListView(
-                controller: _scrollController,
-                children: _buildBreedList(),
-              ),
-            ),
+            breeds: breeds,
+            selectedBreedIds: _selectedBreedIds,
+            onBreedSelected: (id, isSelected) {
+              setState(() {
+                if (isSelected ?? false) {
+                  _selectedBreedIds.add(id);
+                } else {
+                  _selectedBreedIds.remove(id);
+                }
+              });
+            },
+            listHeight: widget.listHeight,
           ),
           SizedBox(height: 16),
           Row(
@@ -144,8 +120,9 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
                 cursor: SystemMouseCursors.click,
                 child: TextButton(
                   onPressed:
-                      _selectedTitle.isNotEmpty && _selectedBreedId != null
+                      _selectedTitle.isNotEmpty && _selectedBreedIds.isNotEmpty
                           ? () {
+                              widget.onEdit(_selectedTitle, _selectedBreedIds);
                               Navigator.of(context).pop(); // Close on save
                             }
                           : null,
@@ -156,7 +133,7 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                           color: _selectedTitle.isNotEmpty &&
-                                  _selectedBreedId != null
+                                  _selectedBreedIds.isNotEmpty
                               ? AppColors.primaryForeground
                               : AppColors.primaryForeground.withOpacity(0.5),
                         ),
@@ -168,46 +145,5 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
         ],
       ),
     );
-  }
-
-  List<Widget> _buildBreedList() {
-    List<Widget> breedWidgets = [];
-
-    for (var breed in widget.breeds) {
-      breedWidgets.add(
-        RadioListTile<int>(
-          title: Text(breed.name),
-          value: breed.id,
-          groupValue: _selectedBreedId,
-          onChanged: (value) {
-            setState(() {
-              _selectedBreedId = value;
-            });
-          },
-        ),
-      );
-
-      if (breed.hasSubBreeds) {
-        for (var subBreed
-            in widget.subBreeds.where((sub) => sub.parentBreedId == breed.id)) {
-          breedWidgets.add(
-            Padding(
-              padding: const EdgeInsets.only(left: 24.0),
-              child: RadioListTile<int>(
-                title: Text(subBreed.title),
-                value: subBreed.id,
-                groupValue: _selectedBreedId,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedBreedId = value;
-                  });
-                },
-              ),
-            ),
-          );
-        }
-      }
-    }
-    return breedWidgets;
   }
 }

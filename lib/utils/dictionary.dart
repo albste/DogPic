@@ -10,6 +10,8 @@ class Dictionary {
   static String result_page_title = "Search results:";
   static String result_page_new_search_button = "New search";
   static String favorites_page_title = "Favorites Lists:";
+  static String favorites_page_empty_list_message =
+      "No list added. Please create one";
   static String favorites_page_new_dialog_title = "Create new list";
   static String favorites_page_edit_dialog_title = "Edit list";
   static String favorites_page_enter_title_placeholder = "Enter list title..";

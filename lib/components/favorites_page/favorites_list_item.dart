@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class FavoritesListItem extends StatefulWidget {
   final FavoritesListModel item;
-  final Function(int) onEdit;
+  final Function(FavoritesListModel) onEdit;
   final Function(int) onDelete;
   FavoritesListItem(
       {required this.item, required this.onEdit, required this.onDelete});
@@ -64,7 +64,7 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
             children: [
               IconButton(
                 icon: Icon(Icons.edit, color: AppColors.primary),
-                onPressed: () => widget.onEdit(widget.item.id),
+                onPressed: () => widget.onEdit(widget.item),
               ),
               IconButton(
                 icon: Icon(Icons.close, color: AppColors.primary),

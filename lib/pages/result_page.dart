@@ -4,21 +4,12 @@ import 'package:dogpic/utils/dictionary.dart';
 import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ResultPage extends StatelessWidget {
   final List<String> resultUrls;
   final VoidCallback onGoHome;
 
   ResultPage({required this.resultUrls, required this.onGoHome});
-
-  // final List<String> resultUrls = [
-  //   'https://images.dog.ceo/breeds/dachshund/puppy-1006024_640.jpg',
-  //   'https://via.placeholder.com/410',
-  //   'https://via.placeholder.com/420',
-  //   'https://via.placeholder.com/430',
-  //   'https://via.placeholder.com/440',
-  // ];
 
   @override
   Widget build(BuildContext context) {

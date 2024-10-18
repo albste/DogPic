@@ -3,20 +3,22 @@ import 'package:dogpic/components/favorites_page/edit_favorites_list_dialog.dart
 import 'package:dogpic/models/dog_breed_model.dart';
 import 'package:dogpic/models/dog_subbreed_model.dart';
 import 'package:dogpic/models/favorites_list_model.dart';
+import 'package:dogpic/providers/favorites_notifier.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:dogpic/utils/dictionary.dart';
 import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:dogpic/models/favorites_list_model.dart';
 import 'package:dogpic/components/favorites_page/favorites_list.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class FavoritesPage extends StatefulWidget {
+class FavoritesPage extends ConsumerStatefulWidget {
   @override
   _FavoritesPageState createState() => _FavoritesPageState();
 }
 
-class _FavoritesPageState extends State<FavoritesPage> {
+class _FavoritesPageState extends ConsumerState<FavoritesPage> {
   void _showCreateFavoritesListDialog() {
     showModalBottomSheet(
       context: context,
@@ -30,18 +32,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
             borderRadius: BorderRadius.vertical(
                 top: Radius.circular(16)), // Rounded top corners
           ),
-          child: CreateFavoritesListDialog(breeds: [
-            DogBreedModel(
-                id: 1, name: 'title', hasSubBreeds: true, subBreeds: [])
-          ], subBreeds: [
-            DogSubBreedModel(id: 1, parentBreedId: 1, title: 'title2')
-          ], listHeight: 300), // Your dialog widget
+          child: CreateFavoritesListDialog(
+              onCreate: (title, breedsIds) {
+                ref
+                    .read(favoritesProvider.notifier)
+                    .addFavorite(title, breedsIds);
+              },
+              listHeight: 300), // Your dialog widget
         );
       },
     );
   }
 
-  void _showEditFavoritesListDialog(int itemId) {
+  void _showEditFavoritesListDialog(FavoritesListModel item) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Allows the bottom sheet to be full height
@@ -54,18 +57,21 @@ class _FavoritesPageState extends State<FavoritesPage> {
             borderRadius: BorderRadius.vertical(
                 top: Radius.circular(16)), // Rounded top corners
           ),
-          child: EditFavoritesListDialog(breeds: [
-            DogBreedModel(
-                id: 1, name: 'title', hasSubBreeds: true, subBreeds: [])
-          ], subBreeds: [
-            DogSubBreedModel(id: 1, parentBreedId: 1, title: 'title2')
-          ], listHeight: 300), // Your dialog widget
+          child: EditFavoritesListDialog(
+              initialTitle: item.title,
+              initialBreedIds: item.selectedBreedIds,
+              onEdit: (newTitle, newBreedsIds) {
+                ref.read(favoritesProvider.notifier).updateFavorite(
+                      item.id,
+                      newTitle,
+                      newBreedsIds,
+                    );
+              },
+              listHeight: 300),
         );
       },
     );
   }
-
-  void _deleteItem(int itemId) {}
 
   @override
   Widget build(BuildContext context) {
@@ -73,88 +79,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
     final double pageWidth =
         SizeCalculator.LargeContainerWidthCalculator(screenWidth);
     final ScrollController _scrollController = ScrollController();
-    final List<FavoritesListModel> favorites = [
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-      FavoritesListModel(
-          id: 1,
-          title: 'title2',
-          selectedBreedIds: [1],
-          selectedSubBreedIds: [2]),
-    ]; // List of favorite items
+
+    final favoritesList = ref.watch(favoritesProvider);
 
     return Center(
       child: Container(
@@ -182,14 +108,17 @@ class _FavoritesPageState extends State<FavoritesPage> {
             ),
             SizedBox(height: 20),
             // Show message if the favorites list is empty, otherwise show the list
-            favorites.isEmpty
+            favoritesList.isEmpty
                 ? Center(
                     child: Text(
-                      'No list added. Please create one',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors
-                            .grey[600], // Adjust the color to match your theme
+                      Dictionary.favorites_page_empty_list_message,
+                      style: GoogleFonts.openSans(
+                        textStyle: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17,
+                          color: AppColors.primaryForeground.withOpacity(0.5),
+                        ),
                       ),
                     ),
                   )
@@ -197,10 +126,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     padding: EdgeInsets.only(top: 80, bottom: 50),
                     child: Container(
                       child: FavoritesList(
-                        itemList: favorites,
+                        itemList: favoritesList,
                         scrollController: _scrollController,
                         onEdit: _showEditFavoritesListDialog,
-                        onDelete: _deleteItem,
+                        onDelete: (idToDelete) {
+                          ref
+                              .read(favoritesProvider.notifier)
+                              .removeFavorite(idToDelete);
+                        },
                       ),
                     )),
             // Positioned add button (+)
@@ -220,11 +153,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       BorderRadius.circular(50), // Rende il bordo rotondo
                 ),
               ),
-              //  FloatingActionButton(
-              //   onPressed: _showCreateFavoritesListDialog,
-              //   backgroundColor: Colors.blue, // Adjust color as needed
-              //   child: Icon(Icons.add, color: Colors.white),
-              // ),
             ),
           ],
         ),

@@ -1,5 +1,7 @@
 import 'package:dogpic/models/dog_breed_model.dart';
 import 'package:dogpic/models/dog_subbreed_model.dart';
+import 'package:dogpic/models/favorites_list_model.dart';
+import 'package:dogpic/providers/favorites_notifier.dart';
 import 'package:dogpic/repositories/dog_repository.dart';
 import 'package:dogpic/services/api_client.dart';
 import 'package:dogpic/services/dog_service.dart';

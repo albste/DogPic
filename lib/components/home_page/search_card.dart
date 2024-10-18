@@ -76,6 +76,8 @@ class _SearchCardState extends ConsumerState<SearchCard> {
 
   @override
   Widget build(BuildContext context) {
+    // final favoritesLists = ref.watch(favoritesProvider);
+
     return Container(
       width: widget.width,
       padding: EdgeInsets.all(7),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class FavoritesList extends StatefulWidget {
   final List<FavoritesListModel> itemList;
   final ScrollController scrollController;
-  final Function(int) onEdit;
+  final Function(FavoritesListModel) onEdit;
   final Function(int) onDelete;
   FavoritesList(
       {required this.itemList,
