@@ -1,8 +1,10 @@
 import 'package:dogpic/models/dog_breed_model.dart';
 import 'package:dogpic/models/dog_subbreed_model.dart';
+import 'package:dogpic/utils/colors.dart';
 import 'package:dogpic/utils/dictionary.dart';
 import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditFavoritesListDialog extends StatefulWidget {
   final List<DogBreedModel> breeds;
@@ -36,12 +38,57 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(Dictionary.favorites_page_edit_dialog_title),
+          Text(Dictionary.favorites_page_edit_dialog_title,
+              style: GoogleFonts.openSans(
+                textStyle: TextStyle(
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: AppColors.primaryForeground,
+                ),
+              )),
+          Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Text(Dictionary.title,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: AppColors.primaryForeground,
+                    ),
+                  ))),
           TextField(
+            cursorColor: AppColors.primaryForeground,
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(
+                decoration: TextDecoration.none,
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+                color: AppColors.primaryForeground,
+              ),
+            ),
             decoration: InputDecoration(
-              labelText: '',
               hintText: Dictionary.favorites_page_enter_title_placeholder,
+              hintStyle: TextStyle(
+                decoration: TextDecoration.none,
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+                color: AppColors.primaryForeground.withOpacity(0.6),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: AppColors.primary,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: AppColors.primary,
+                  width: 2.0,
+                ),
+              ),
             ),
             onChanged: (value) {
               setState(() {
@@ -49,7 +96,17 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
               });
             },
           ),
-          SizedBox(height: 16),
+          Padding(
+              padding: EdgeInsets.only(top: 30, bottom: 10),
+              child: Text(Dictionary.breeds,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: AppColors.primaryForeground,
+                    ),
+                  ))),
           Container(
             height: widget.listHeight,
             child: Scrollbar(
@@ -65,24 +122,47 @@ class _EditFavoritesListDialogState extends State<EditFavoritesListDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(
-                onPressed: () {
-                  // Optional: Add any action for cancel button
-                  Navigator.of(context)
-                      .pop(); // Assuming you still want to close it
-                },
-                child: Text(Dictionary.cancel),
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(Dictionary.cancel,
+                      style: GoogleFonts.openSans(
+                        textStyle: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: AppColors.primaryForeground,
+                        ),
+                      )),
+                ),
               ),
               SizedBox(width: 8),
-              TextButton(
-                onPressed: _selectedTitle.isNotEmpty && _selectedBreedId != null
-                    ? () {
-                        // Save the selected title and breeds/sub-breeds
-                        Navigator.of(context).pop(); // Close on save
-                      }
-                    : null,
-                child: Text(Dictionary.update),
-              ),
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: TextButton(
+                  onPressed:
+                      _selectedTitle.isNotEmpty && _selectedBreedId != null
+                          ? () {
+                              Navigator.of(context).pop(); // Close on save
+                            }
+                          : null,
+                  child: Text(Dictionary.update,
+                      style: GoogleFonts.openSans(
+                        textStyle: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: _selectedTitle.isNotEmpty &&
+                                  _selectedBreedId != null
+                              ? AppColors.primaryForeground
+                              : AppColors.primaryForeground.withOpacity(0.5),
+                        ),
+                      )),
+                ),
+              )
             ],
           ),
         ],

@@ -1,4 +1,3 @@
-// Model for Dog Sub Breeds
 class DogSubBreedModel {
   final int id;
   final int parentBreedId;
@@ -9,4 +8,13 @@ class DogSubBreedModel {
     required this.parentBreedId,
     required this.title,
   });
+
+  factory DogSubBreedModel.fromJson(
+      Map<String, dynamic> json, int id, int parentBreedId) {
+    return DogSubBreedModel(
+      id: id,
+      parentBreedId: parentBreedId,
+      title: json['title'],
+    );
+  }
 }

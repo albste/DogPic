@@ -1,26 +1,31 @@
 import 'package:dogpic/components/general/dropdown_with_title.dart';
 import 'package:dogpic/components/general/switch_with_title.dart';
+import 'package:dogpic/models/dog_breed_model.dart';
 import 'package:dogpic/models/search_settings_model.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:dogpic/utils/dictionary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dogpic/providers/breed_notifier.dart'; // Importa il tuo provider
 
-class SearchCard extends StatefulWidget {
+class SearchCard extends ConsumerStatefulWidget {
   final double width;
+  final bool isSearching;
   final Function(SearchSettingsModel) onSearch;
 
   const SearchCard({
     required this.width,
     required this.onSearch,
+    required this.isSearching,
   });
 
   @override
   _SearchCardState createState() => _SearchCardState();
 }
 
-class _SearchCardState extends State<SearchCard> {
+class _SearchCardState extends ConsumerState<SearchCard> {
   bool useFavoriteList = false;
   bool randomImages = true;
   bool switchAnimationEnabled = false;
@@ -28,22 +33,45 @@ class _SearchCardState extends State<SearchCard> {
   String? selectedSubBreed;
   String? favoriteList;
 
-  final List<String> breeds = ['African', 'Bulldog', 'Labrador', 'Poodle'];
-
-  final List<String> subbreeds = [
-    'All sub breeds',
-    'Sub 1',
-    'Sub 2',
-  ];
+  // Inizialmente vuoti, saranno popolati dal provider
+  List<DogBreedModel> breeds = [];
+  List<String> subbreeds = [];
 
   final List<String> favoriteLists = ['List 1', 'List 2', 'List 3'];
 
   @override
   void initState() {
     super.initState();
-    selectedBreed = breeds[0];
-    selectedSubBreed = subbreeds[0];
-    favoriteList = favoriteLists[0];
+    // Carica le razze all'avvio
+    loadBreeds();
+  }
+
+  Future<void> loadBreeds() async {
+    final breedList = ref
+        .read(breedNotifierProvider); // Usa il provider per ottenere le razze
+    setState(() {
+      breeds = breedList;
+      selectedBreed = breeds.isNotEmpty
+          ? breeds[0].name
+          : null; // Imposta la razza selezionata
+      updateSubBreeds(); // Aggiorna le sottorazze in base alla razza selezionata
+    });
+  }
+
+  void updateSubBreeds() {
+    if (selectedBreed != null) {
+      // Trova la razza selezionata
+      final breed = breeds.firstWhere((b) => b.name == selectedBreed,
+          orElse: () => DogBreedModel(
+              id: -1, name: '', hasSubBreeds: false, subBreeds: []));
+
+      setState(() {
+        // Aggiungi "All sub breeds" come primo elemento
+        subbreeds = ['All sub breeds'] +
+            breed.subBreeds.map((sub) => sub.title).toList();
+        selectedSubBreed = subbreeds[0]; // Preseleziona "All sub breeds"
+      });
+    }
   }
 
   @override
@@ -117,11 +145,12 @@ class _SearchCardState extends State<SearchCard> {
                           DropdownWithTitle(
                             title: Dictionary.search_card_breed,
                             selectedValue: selectedBreed,
-                            items: breeds,
+                            items: breeds.map((breed) => breed.name).toList(),
                             onChanged: (newValue) {
                               setState(() {
                                 selectedBreed =
-                                    newValue; // Aggiorna il valore selezionato
+                                    newValue; // Aggiorna la razza selezionata
+                                updateSubBreeds(); // Aggiorna le sottorazze in base alla razza selezionata
                               });
                             },
                           ),
@@ -151,33 +180,43 @@ class _SearchCardState extends State<SearchCard> {
               },
             ),
             SizedBox(height: 10),
-            SwitchWithTitle(
-              title: Dictionary.search_card_random_images_switch,
-              value: randomImages,
-              onChanged: (newValue) {
-                setState(() {
-                  randomImages = newValue; // Aggiorna lo stato del switch
-                });
-              },
-            ),
+            !useFavoriteList
+                ? SwitchWithTitle(
+                    title: Dictionary.search_card_random_images_switch,
+                    value: randomImages,
+                    onChanged: (newValue) {
+                      setState(() {
+                        randomImages = newValue; // Aggiorna lo stato del switch
+                      });
+                    },
+                  )
+                : SizedBox(height: 5),
             SizedBox(height: 30),
             // Search Button
             Align(
               alignment: Alignment.centerRight,
-              child: FloatingActionButton(
-                onPressed: () =>
-                    widget.onSearch(SearchSettingsModel(name: 'name')),
-                backgroundColor: AppColors.primary,
-                child: Icon(
-                  Icons.search,
-                  size: 30,
-                  color: AppColors.secondaryForeground,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(50), // Rende il bordo rotondo
-                ),
-              ),
+              child: widget.isSearching
+                  ? CircularProgressIndicator(
+                      color: AppColors.primary,
+                    )
+                  : FloatingActionButton(
+                      onPressed: () => widget.onSearch(SearchSettingsModel(
+                        breed: selectedBreed!,
+                        subBreed: selectedSubBreed!,
+                        useFavoriteList: useFavoriteList,
+                        randomImages: randomImages,
+                      )),
+                      backgroundColor: AppColors.primary,
+                      child: Icon(
+                        Icons.search,
+                        size: 30,
+                        color: AppColors.secondaryForeground,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(50), // Rende il bordo rotondo
+                      ),
+                    ),
             ),
           ],
         ),
@@ -185,15 +224,3 @@ class _SearchCardState extends State<SearchCard> {
     );
   }
 }
-
-// child: Center(
-//         child: Column(children: [
-//       Container(
-//         height: 500,
-//         margin: EdgeInsets.all(20),
-//         color: Colors.grey[200],
-//         child: Center(
-//           child: Text('Example Content'),
-//         ),
-//       ),
-//     ])),

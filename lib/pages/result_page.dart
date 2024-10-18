@@ -7,17 +7,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ResultPage extends StatelessWidget {
+  final List<String> resultUrls;
   final VoidCallback onGoHome;
 
-  ResultPage({required this.onGoHome});
+  ResultPage({required this.resultUrls, required this.onGoHome});
 
-  final List<String> imageUrls = [
-    'https://images.dog.ceo/breeds/dachshund/puppy-1006024_640.jpg',
-    'https://via.placeholder.com/410',
-    'https://via.placeholder.com/420',
-    'https://via.placeholder.com/430',
-    'https://via.placeholder.com/440',
-  ];
+  // final List<String> resultUrls = [
+  //   'https://images.dog.ceo/breeds/dachshund/puppy-1006024_640.jpg',
+  //   'https://via.placeholder.com/410',
+  //   'https://via.placeholder.com/420',
+  //   'https://via.placeholder.com/430',
+  //   'https://via.placeholder.com/440',
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +52,11 @@ class ResultPage extends StatelessWidget {
           SizedBox(height: 20),
           Expanded(
             child: ListView.builder(
-              itemCount: imageUrls.length,
+              itemCount: resultUrls.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 20), // Margin of 20px
-                  child: ImageCard(imageUrl: imageUrls[index]),
+                  child: ImageCard(imageUrl: resultUrls[index]),
                 );
               },
             ),

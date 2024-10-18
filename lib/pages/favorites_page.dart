@@ -32,7 +32,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
           ),
           child: CreateFavoritesListDialog(breeds: [
             DogBreedModel(
-                id: 1, name: 'title', hasSubBreeds: true, subBreedId: 1)
+                id: 1, name: 'title', hasSubBreeds: true, subBreeds: [])
           ], subBreeds: [
             DogSubBreedModel(id: 1, parentBreedId: 1, title: 'title2')
           ], listHeight: 300), // Your dialog widget
@@ -56,7 +56,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
           ),
           child: EditFavoritesListDialog(breeds: [
             DogBreedModel(
-                id: 1, name: 'title', hasSubBreeds: true, subBreedId: 1)
+                id: 1, name: 'title', hasSubBreeds: true, subBreeds: [])
           ], subBreeds: [
             DogSubBreedModel(id: 1, parentBreedId: 1, title: 'title2')
           ], listHeight: 300), // Your dialog widget

@@ -1,5 +1,6 @@
 import 'package:dogpic/models/favorites_list_model.dart';
 import 'package:dogpic/utils/colors.dart';
+import 'package:dogpic/utils/dictionary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,16 +48,17 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
                   color: AppColors.primaryForeground,
                 ),
               )),
-          subtitle:
-              Text('${widget.item.selectedBreedIds.length} breeds selected',
-                  style: GoogleFonts.openSans(
-                    textStyle: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                      color: AppColors.primaryForeground,
-                    ),
-                  )),
+          subtitle: Text(
+              '${widget.item.selectedBreedIds.length} ' +
+                  Dictionary.favorites_page_breeds_selected,
+              style: GoogleFonts.openSans(
+                textStyle: TextStyle(
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                  color: AppColors.primaryForeground,
+                ),
+              )),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
