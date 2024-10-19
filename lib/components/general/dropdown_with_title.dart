@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; // Assicurati di avere la dipendenza di google_fonts nel tuo pubspec.yaml
-import 'package:dogpic/utils/colors.dart'; // Modifica in base alla tua struttura dei pacchetti
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dogpic/utils/colors.dart';
 
+// Dropdown component with a label above
 class DropdownWithTitle extends StatelessWidget {
-  final String title; // Titolo del dropdown
-  final String? selectedValue; // Valore selezionato
-  final List<String> items; // Lista di elementi del dropdown
-  final ValueChanged<String?>
-      onChanged; // Callback per il cambiamento della selezione
+  final String title; // Label text
+  final String? selectedValue; // Selected dropdown's value
+  final List<String> items; // Items of dropdown
+  final ValueChanged<String?> onChanged; // On selection changed event
 
   const DropdownWithTitle({
     super.key,
@@ -22,7 +22,7 @@ class DropdownWithTitle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Titolo del Dropdown
+        // Label
         Text(
           title,
           style: GoogleFonts.openSans(
@@ -44,30 +44,31 @@ class DropdownWithTitle extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(
-                color: AppColors.primary, // Colore del bordo non selezionato
+                color: AppColors.primary,
                 width: 1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(
-                color: AppColors.primary, // Colore del bordo non selezionato
+                color: AppColors.primary,
                 width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(
-                color: AppColors.primary, // Colore del bordo selezionato
+                color: AppColors.primary,
                 width: 2,
               ),
             ),
           ),
+          // Down arrow icon
           icon: Icon(
             Icons.arrow_drop_down,
-            color: AppColors.primary, // Colore dell'icona del dropdown
+            color: AppColors.primary,
           ),
-          dropdownColor: Colors.white, // Sfondo bianco per il menu dropdown
+          dropdownColor: Colors.white,
           style: GoogleFonts.openSans(
             textStyle: TextStyle(
               decoration: TextDecoration.none,
@@ -77,6 +78,7 @@ class DropdownWithTitle extends StatelessWidget {
             ),
           ),
           items: items.map<DropdownMenuItem<String>>((String value) {
+            // Single dropdown item
             return DropdownMenuItem<String>(
               value: value,
               child: Text(
@@ -86,8 +88,7 @@ class DropdownWithTitle extends StatelessWidget {
                     decoration: TextDecoration.none,
                     fontWeight: FontWeight.w500,
                     fontSize: 15,
-                    color: AppColors
-                        .primaryForeground, // Colore del testo degli item
+                    color: AppColors.primaryForeground,
                   ),
                 ),
               ),

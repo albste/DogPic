@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dogpic/utils/dictionary.dart';
 
+// The bottom bar used in all app's views
 class CustomBottomBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
@@ -70,17 +71,18 @@ class CustomBottomBar extends StatelessWidget {
     );
   }
 
+  // Single item constructor
   FlashyTabBarItem buildTabItem(
       {required IconData icon, required String title, required int index}) {
     return FlashyTabBarItem(
       activeColor: AppColors.primary,
       inactiveColor: AppColors.primary.withOpacity(0.6),
       icon: MouseRegion(
-        cursor: SystemMouseCursors.click, // Change cursor to hand
+        cursor: SystemMouseCursors.click,
         child: Icon(icon, size: 26),
       ),
       title: MouseRegion(
-        cursor: SystemMouseCursors.click, // Change cursor to hand
+        cursor: SystemMouseCursors.click,
         child: Text(
           title,
           textAlign: TextAlign.left,

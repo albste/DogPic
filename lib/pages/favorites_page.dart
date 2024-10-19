@@ -18,6 +18,7 @@ class FavoritesPage extends ConsumerStatefulWidget {
 }
 
 class _FavoritesPageState extends ConsumerState<FavoritesPage> {
+  // On create new list pressed
   void showCreateFavoritesListDialog() {
     showModalBottomSheet(
       context: context,
@@ -25,7 +26,7 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
       backgroundColor: Colors.transparent, // Make the background transparent
       builder: (BuildContext context) {
         return Container(
-          padding: const EdgeInsets.all(16), // Add padding if needed
+          padding: const EdgeInsets.all(16),
           decoration: const BoxDecoration(
             color: Colors.white, // Background color of the bottom sheet
             borderRadius: BorderRadius.vertical(
@@ -37,12 +38,13 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
                     .read(favoritesProvider.notifier)
                     .addFavorite(title, breedsIds);
               },
-              listHeight: 300), // Your dialog widget
+              listHeight: 300),
         );
       },
     );
   }
 
+  // On edit list pressed
   void showEditFavoritesListDialog(FavoritesListModel item) {
     showModalBottomSheet(
       context: context,
@@ -50,7 +52,7 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
       backgroundColor: Colors.transparent, // Make the background transparent
       builder: (BuildContext context) {
         return Container(
-          padding: const EdgeInsets.all(16), // Add padding if needed
+          padding: const EdgeInsets.all(16),
           decoration: const BoxDecoration(
             color: Colors.white, // Background color of the bottom sheet
             borderRadius: BorderRadius.vertical(
@@ -74,11 +76,14 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate the width of the page
     final screenWidth = MediaQuery.of(context).size.width;
     final double pageWidth =
         SizeCalculator.largeContainerWidthCalculator(screenWidth);
+
     final ScrollController scrollController = ScrollController();
 
+    // Get all favorites lists
     final favoritesList = ref.watch(favoritesProvider);
 
     return Center(
@@ -90,9 +95,11 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
               padding: const EdgeInsets.only(top: 20),
               child: Row(
                 children: [
+                  // Heart icon
                   Icon(Icons.favorite_border,
                       color: AppColors.primary, size: 30),
                   const SizedBox(width: 10),
+                  // Favorites title
                   Text(Dictionary.favorites_page_title,
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(
@@ -135,7 +142,7 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
                         },
                       ),
                     )),
-            // Positioned add button (+)
+            // Add list button
             Positioned(
               bottom: 16,
               right: 20,
@@ -143,8 +150,7 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
                 onPressed: showCreateFavoritesListDialog,
                 backgroundColor: AppColors.primary,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(50), // Rende il bordo rotondo
+                  borderRadius: BorderRadius.circular(50),
                 ),
                 child: Icon(
                   Icons.add,

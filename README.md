@@ -58,3 +58,7 @@ Get images list by breed and sub breed
 ## API Documentation
 
 https://dog.ceo/dog-api/documentation/
+
+## Markup
+
+You can find the project markup in the DogPic_Markup.svg file in the root of the project. During the development phase some components have changed and differ from how they were initially in the markup.

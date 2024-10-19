@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Content of bottomsheet for Create a Favorites List
 class CreateFavoritesListDialog extends ConsumerStatefulWidget {
   final double listHeight;
   final Function(String title, List<int> breedsIds) onCreate;
@@ -32,13 +33,13 @@ class _CreateFavoritesListDialogState
   @override
   void initState() {
     super.initState();
-    // Carica le razze all'avvio
+    // Load breeds on start
     loadBreeds();
   }
 
+  // Using provider to get all breeds
   Future<void> loadBreeds() async {
-    final breedList = ref
-        .read(breedNotifierProvider); // Usa il provider per ottenere le razze
+    final breedList = ref.read(breedNotifierProvider);
     setState(() {
       breeds = breedList;
     });
@@ -46,6 +47,7 @@ class _CreateFavoritesListDialogState
 
   @override
   Widget build(BuildContext context) {
+    // Getting the dialog width
     final screenWidth = MediaQuery.of(context).size.width;
     final double cardWidth =
         SizeCalculator.largeContainerWidthCalculator(screenWidth) - 40;
@@ -57,6 +59,7 @@ class _CreateFavoritesListDialogState
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Dialog title text
           Text(Dictionary.favorites_page_new_dialog_title,
               style: GoogleFonts.openSans(
                 textStyle: TextStyle(
@@ -67,6 +70,7 @@ class _CreateFavoritesListDialogState
                 ),
               )),
           const SizedBox(height: 15),
+          // Favorites title and breeds list form
           FavoritesListForm(
             selectedTitle: selectedTitle,
             onTitleChanged: (title) {
@@ -88,9 +92,11 @@ class _CreateFavoritesListDialogState
             listHeight: widget.listHeight,
           ),
           const SizedBox(height: 16),
+          // Bottom dialog's buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // Cancel button
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: TextButton(
@@ -109,10 +115,12 @@ class _CreateFavoritesListDialogState
                 ),
               ),
               const SizedBox(width: 8),
+              // Save button
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: TextButton(
                   onPressed:
+                      // Check if all fields are not empty
                       selectedTitle.isNotEmpty && selectedBreedIds.isNotEmpty
                           ? () {
                               widget.onCreate(selectedTitle, selectedBreedIds);
@@ -125,6 +133,7 @@ class _CreateFavoritesListDialogState
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
+                          // Set disabled color if fields are not empty
                           color: selectedTitle.isNotEmpty &&
                                   selectedBreedIds.isNotEmpty
                               ? AppColors.primaryForeground

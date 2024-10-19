@@ -2,6 +2,7 @@ import 'package:dogpic/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+// First block on home page with dark background and logo image white
 class TopRectangle extends StatefulWidget {
   final double width;
   final double height;

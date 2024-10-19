@@ -3,6 +3,7 @@ import 'package:dogpic/providers/dog_providers.dart';
 import 'package:dogpic/repositories/dog_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Used as var containing all breeds and relative sub breeds
 class BreedNotifier extends StateNotifier<List<DogBreedModel>> {
   final DogRepository dogRepository;
 

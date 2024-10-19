@@ -2,10 +2,11 @@ import 'package:dogpic/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Switch component with a label
 class SwitchWithTitle extends StatelessWidget {
-  final String title; // Titolo del switch
-  final bool value; // Stato del switch
-  final ValueChanged<bool> onChanged; // Callback per il cambiamento dello stato
+  final String title; // Label text
+  final bool value; // Switch value
+  final ValueChanged<bool> onChanged; // On changed switch value event
 
   const SwitchWithTitle({
     super.key,
@@ -19,6 +20,7 @@ class SwitchWithTitle extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        // Label
         Text(
           title,
           style: GoogleFonts.openSans(
@@ -30,9 +32,10 @@ class SwitchWithTitle extends StatelessWidget {
             ),
           ),
         ),
+        // Switch
         Switch(
           value: value,
-          onChanged: onChanged, // Trigger per il cambiamento dello stato
+          onChanged: onChanged,
           activeColor: AppColors.primary,
         ),
       ],

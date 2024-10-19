@@ -6,6 +6,7 @@ import 'package:dogpic/pages/home_page.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//All content of a page will displayed here (excluding the appbar)
 class PageContainer extends ConsumerStatefulWidget {
   const PageContainer({super.key});
 
@@ -31,6 +32,7 @@ class _PageContainerState extends ConsumerState<PageContainer> {
     });
   }
 
+  // Load first time the breeds and sub breeds lists
   @override
   void initState() {
     super.initState();
@@ -46,6 +48,7 @@ class _PageContainerState extends ConsumerState<PageContainer> {
 
     return Scaffold(
       appBar: null, // Remove appbar
+      // Page
       body: breeds.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : AnimatedSwitcher(
@@ -59,6 +62,7 @@ class _PageContainerState extends ConsumerState<PageContainer> {
               child: pages[selectedIndex], // Display the selected page
             ),
       backgroundColor: AppColors.pageBackground,
+      // Bottom bar
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: selectedIndex,
         onItemSelected: onItemTapped,

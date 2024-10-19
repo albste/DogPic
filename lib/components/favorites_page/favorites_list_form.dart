@@ -4,6 +4,7 @@ import 'package:dogpic/models/dog_breed_model.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:dogpic/utils/dictionary.dart';
 
+// Contains the field for entering the title and the list of breed checkboxes, used in create and edit list dialogs
 class FavoritesListForm extends StatefulWidget {
   final String selectedTitle;
   final Function(String) onTitleChanged;
@@ -23,7 +24,6 @@ class FavoritesListForm extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _FavoritesListFormState createState() => _FavoritesListFormState();
 }
 
@@ -47,6 +47,7 @@ class _FavoritesListFormState extends State<FavoritesListForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Title text
         Text(
           Dictionary.title,
           style: GoogleFonts.openSans(
@@ -58,6 +59,7 @@ class _FavoritesListFormState extends State<FavoritesListForm> {
             ),
           ),
         ),
+        // Title text field
         TextField(
           cursorColor: AppColors.primaryForeground,
           style: GoogleFonts.openSans(
@@ -89,8 +91,9 @@ class _FavoritesListFormState extends State<FavoritesListForm> {
             ),
           ),
           onChanged: widget.onTitleChanged,
-          controller: controller, // Usa il controller dello stato
+          controller: controller, // Setting the text field's controller
         ),
+        // Breeds text
         Padding(
           padding: const EdgeInsets.only(top: 30, bottom: 10),
           child: Text(
@@ -105,6 +108,7 @@ class _FavoritesListFormState extends State<FavoritesListForm> {
             ),
           ),
         ),
+        // Breed's checkboxes list
         SizedBox(
           height: widget.listHeight,
           child: ListView(

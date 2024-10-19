@@ -5,15 +5,17 @@ import 'package:dogpic/utils/size_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Here will displayed images from search result
 class ResultPage extends StatelessWidget {
-  final List<String> resultUrls;
-  final VoidCallback onGoHome;
+  final List<String> resultUrls; // The images urls
+  final VoidCallback onGoHome; // On new search button clicked
 
   const ResultPage(
       {super.key, required this.resultUrls, required this.onGoHome});
 
   @override
   Widget build(BuildContext context) {
+    // Get widget max width
     final screenWidth = MediaQuery.of(context).size.width;
     final double pageWidth =
         SizeCalculator.largeContainerWidthCalculator(screenWidth);
@@ -23,6 +25,7 @@ class ResultPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Icon and page title
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: Row(
@@ -42,6 +45,7 @@ class ResultPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
+          // List of results
           Expanded(
             child: ListView.builder(
               itemCount: resultUrls.length,
@@ -53,6 +57,7 @@ class ResultPage extends StatelessWidget {
               },
             ),
           ),
+          // New search button
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 20),
             child: Center(

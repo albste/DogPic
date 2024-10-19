@@ -8,18 +8,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//Content of bottomsheet for Edit a Favorites List
 class EditFavoritesListDialog extends ConsumerStatefulWidget {
-  final double listHeight;
-  final Function(String newTitle, List<int> newBreedsIds) onEdit;
-  final String initialTitle; // Aggiunto
-  final List<int> initialBreedIds; // Aggiunto
+  final double listHeight; //Fixed size of breeds's checkboxes list
+  final Function(String newTitle, List<int> newBreedsIds)
+      onEdit; //On edit pressed function trigger
+  final String initialTitle; //The current title of the list to be edited
+  final List<int>
+      initialBreedIds; //The current breeds selected of the list to be edited
 
   const EditFavoritesListDialog({
     super.key,
     required this.listHeight,
     required this.onEdit,
-    required this.initialTitle, // Aggiunto
-    required this.initialBreedIds, // Aggiunto
+    required this.initialTitle,
+    required this.initialBreedIds,
   });
 
   @override
@@ -36,16 +39,16 @@ class _EditFavoritesListDialogState
   @override
   void initState() {
     super.initState();
-    // Carica le razze all'avvio
+    //Load breeds on start
     loadBreeds();
-    // Inizializza il titolo e la lista di ID selezionati
+    //Get initial values
     selectedTitle = widget.initialTitle; // Aggiunto
     selectedBreedIds = List.from(widget.initialBreedIds); // Aggiunto
   }
 
+  // Using provider to get all breeds
   Future<void> loadBreeds() async {
-    final breedList = ref
-        .read(breedNotifierProvider); // Usa il provider per ottenere le razze
+    final breedList = ref.read(breedNotifierProvider);
     setState(() {
       breeds = breedList;
     });
@@ -53,6 +56,7 @@ class _EditFavoritesListDialogState
 
   @override
   Widget build(BuildContext context) {
+    // Getting the dialog width
     final screenWidth = MediaQuery.of(context).size.width;
     final double cardWidth =
         SizeCalculator.largeContainerWidthCalculator(screenWidth) - 40;
@@ -64,6 +68,7 @@ class _EditFavoritesListDialogState
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Dialog title text
           Text(Dictionary.favorites_page_edit_dialog_title,
               style: GoogleFonts.openSans(
                 textStyle: TextStyle(
@@ -74,6 +79,7 @@ class _EditFavoritesListDialogState
                 ),
               )),
           const SizedBox(height: 15),
+          // Favorites title and breeds list form
           FavoritesListForm(
             selectedTitle: selectedTitle,
             onTitleChanged: (title) {
@@ -95,9 +101,11 @@ class _EditFavoritesListDialogState
             listHeight: widget.listHeight,
           ),
           const SizedBox(height: 16),
+          // Bottom dialog's buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // Cancel button
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: TextButton(
@@ -116,10 +124,12 @@ class _EditFavoritesListDialogState
                 ),
               ),
               const SizedBox(width: 8),
+              // Updated button
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: TextButton(
                   onPressed:
+                      // Check if all fields are not empty
                       selectedTitle.isNotEmpty && selectedBreedIds.isNotEmpty
                           ? () {
                               widget.onEdit(selectedTitle, selectedBreedIds);
@@ -132,6 +142,7 @@ class _EditFavoritesListDialogState
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
+                          // Set disabled color if fields are not empty
                           color: selectedTitle.isNotEmpty &&
                                   selectedBreedIds.isNotEmpty
                               ? AppColors.primaryForeground

@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Single item of favorites list
 class FavoritesListItem extends StatefulWidget {
-  final FavoritesListModel item;
-  final Function(FavoritesListModel) onEdit;
-  final Function(int) onDelete;
+  final FavoritesListModel item; // Single list item
+  final Function(FavoritesListModel) onEdit; // On edit icon clicked
+  final Function(int) onDelete; // On delete icon clicked
   const FavoritesListItem(
       {super.key,
       required this.item,
@@ -37,11 +38,14 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
             ),
           ],
         ),
-        child: ListTile(
+        child:
+            // Logo image dark
+            ListTile(
           leading: SvgPicture.asset(
             'lib/assets/svgs/dogpic_only_image_dark.svg',
             height: 20,
           ),
+          // List title
           title: Text(widget.item.title,
               style: GoogleFonts.openSans(
                 textStyle: TextStyle(
@@ -51,6 +55,7 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
                   color: AppColors.primaryForeground,
                 ),
               )),
+          // List subtitle with number of breeds selected
           subtitle: Text(
               '${widget.item.selectedBreedIds.length} ${Dictionary.favorites_page_breeds_selected}',
               style: GoogleFonts.openSans(
@@ -64,10 +69,12 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Edit icon button
               IconButton(
                 icon: Icon(Icons.edit, color: AppColors.primary),
                 onPressed: () => widget.onEdit(widget.item),
               ),
+              // Delete icon button
               IconButton(
                 icon: Icon(Icons.close, color: AppColors.primary),
                 onPressed: () => widget.onDelete(widget.item.id),

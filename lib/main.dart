@@ -3,7 +3,7 @@
 import 'package:dogpic/pages/page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:dogpic/utils/settings.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Global vars definitions file
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   runApp(

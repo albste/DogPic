@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:dogpic/utils/colors.dart'; // Modifica in base alla tua struttura dei pacchetti
-import 'package:dogpic/models/favorites_list_model.dart'; // Assicurati di importare il tuo modello
+import 'package:dogpic/utils/colors.dart';
+import 'package:dogpic/models/favorites_list_model.dart';
 
+// Dropdown with label used to select favorites list to use in search
 class FavoritesListSelector extends StatelessWidget {
-  final String title; // Titolo del dropdown
-  final FavoritesListModel? selectedValue; // Oggetto selezionato
-  final List<FavoritesListModel> items; // Lista di elementi del dropdown
-  final ValueChanged<FavoritesListModel?>
-      onChanged; // Callback per il cambiamento della selezione
+  final String title; // Label text
+  final FavoritesListModel? selectedValue; // Selected favorites list
+  final List<FavoritesListModel> items; // All favorites lists
+  final ValueChanged<FavoritesListModel?> onChanged; // On selection changed
 
   const FavoritesListSelector({
     super.key,
@@ -23,7 +23,7 @@ class FavoritesListSelector extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Titolo del Dropdown
+        // Label
         Text(
           title,
           style: GoogleFonts.openSans(
@@ -36,7 +36,7 @@ class FavoritesListSelector extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        // Dropdown
+        // Favorites list dropdown
         DropdownButtonFormField<FavoritesListModel?>(
           value: selectedValue,
           onChanged: (FavoritesListModel? newValue) {
@@ -47,30 +47,30 @@ class FavoritesListSelector extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(
-                color: AppColors.primary, // Colore del bordo non selezionato
+                color: AppColors.primary,
                 width: 1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(
-                color: AppColors.primary, // Colore del bordo non selezionato
+                color: AppColors.primary,
                 width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(
-                color: AppColors.primary, // Colore del bordo selezionato
+                color: AppColors.primary,
                 width: 2,
               ),
             ),
           ),
           icon: Icon(
             Icons.arrow_drop_down,
-            color: AppColors.primary, // Colore dell'icona del dropdown
+            color: AppColors.primary,
           ),
-          dropdownColor: Colors.white, // Sfondo bianco per il menu dropdown
+          dropdownColor: Colors.white,
           style: GoogleFonts.openSans(
             textStyle: TextStyle(
               decoration: TextDecoration.none,
@@ -79,19 +79,19 @@ class FavoritesListSelector extends StatelessWidget {
               color: AppColors.primaryForeground,
             ),
           ),
+          // Single list item
           items: items.map<DropdownMenuItem<FavoritesListModel>>(
               (FavoritesListModel item) {
             return DropdownMenuItem<FavoritesListModel>(
               value: item,
               child: Text(
-                item.title, // Mostra il titolo
+                item.title,
                 style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                     decoration: TextDecoration.none,
                     fontWeight: FontWeight.w500,
                     fontSize: 15,
-                    color: AppColors
-                        .primaryForeground, // Colore del testo degli item
+                    color: AppColors.primaryForeground,
                   ),
                 ),
               ),

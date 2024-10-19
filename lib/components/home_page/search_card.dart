@@ -11,12 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dogpic/providers/breed_notifier.dart'; // Importa il tuo provider
+import 'package:dogpic/providers/breed_notifier.dart';
 
+// Search card used on home page
 class SearchCard extends ConsumerStatefulWidget {
   final double width;
-  final bool isSearching;
-  final Function(SearchSettingsModel) onSearch;
+  final bool isSearching; // Var that set if is waiting api call's
+  final Function(SearchSettingsModel) onSearch; // On search clicked
 
   const SearchCard({
     super.key,
@@ -32,55 +33,56 @@ class SearchCard extends ConsumerStatefulWidget {
 class _SearchCardState extends ConsumerState<SearchCard> {
   bool useFavoriteList = false;
   bool randomImages = true;
-  bool switchAnimationEnabled = false;
+  bool switchAnimationEnabled =
+      false; // Use this to manage animation of use favorites list switch
   String? selectedBreed;
   String? selectedSubBreed;
   FavoritesListModel? favoriteListToUse;
 
-  // Inizialmente vuoti, saranno popolati dal provider
+  // They will be filled by the providers
   List<DogBreedModel> breeds = [];
   List<String> subbreeds = [];
 
+  // Load breeds on start
   @override
   void initState() {
     super.initState();
-    // Carica le razze all'avvio
     loadBreeds();
   }
 
   Future<void> loadBreeds() async {
-    final breedList = ref
-        .read(breedNotifierProvider); // Usa il provider per ottenere le razze
+    final breedList =
+        ref.read(breedNotifierProvider); // Using provider to get all breeds
     setState(() {
       breeds = breedList;
-      selectedBreed = breeds.isNotEmpty
-          ? breeds[0].name
-          : null; // Imposta la razza selezionata
-      updateSubBreeds(); // Aggiorna le sottorazze in base alla razza selezionata
+      selectedBreed = breeds.isNotEmpty ? breeds[0].name : null;
+      updateSubBreeds(); // Update the sub breeds
     });
   }
 
   void updateSubBreeds() {
     if (selectedBreed != null) {
-      // Trova la razza selezionata
+      // Find the right breed
       final breed = breeds.firstWhere((b) => b.name == selectedBreed,
           orElse: () => DogBreedModel(
               id: -1, name: '', hasSubBreeds: false, subBreeds: []));
 
       setState(() {
-        // Aggiungi "All sub breeds" come primo elemento
+        // Add "All sub breeds" as first item
         subbreeds = ['All sub breeds'] +
             breed.subBreeds.map((sub) => sub.title).toList();
-        selectedSubBreed = subbreeds[0]; // Preseleziona "All sub breeds"
+        selectedSubBreed = subbreeds[0]; // Pre-select "All sub breeds" item
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Get all favorites lists
     final favoritesLists = ref.watch(favoritesProvider);
+    // Pre-select first favorites list item if there is at least one list
     if (favoritesLists.isNotEmpty && favoriteListToUse == null) {
-      favoriteListToUse = favoritesLists[0]; // Preseleziona il primo elemento
+      favoriteListToUse = favoritesLists[0];
     }
 
     return Container(
@@ -103,6 +105,7 @@ class _SearchCardState extends ConsumerState<SearchCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Logo with title
             Row(
               children: [
                 SvgPicture.asset(
@@ -123,6 +126,7 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                 ),
               ],
             ),
+            // Divider
             Container(
               margin:
                   const EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 15),
@@ -136,40 +140,41 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                 duration:
                     Duration(milliseconds: switchAnimationEnabled ? 300 : 0),
                 child: useFavoriteList
-                    ? FavoritesListSelector(
+                    ?
+                    // Favorites list dropdown
+                    FavoritesListSelector(
                         title: Dictionary.search_card_favorite_list,
                         selectedValue: favoriteListToUse,
                         items: favoritesLists,
                         onChanged: (newValue) {
                           setState(() {
-                            favoriteListToUse =
-                                newValue; // Aggiorna il valore selezionato
+                            favoriteListToUse = newValue;
                           });
                         },
                       )
                     : Column(
                         children: [
+                          // Breed dropdown
                           DropdownWithTitle(
                             title: Dictionary.search_card_breed,
                             selectedValue: selectedBreed,
                             items: breeds.map((breed) => breed.name).toList(),
                             onChanged: (newValue) {
                               setState(() {
-                                selectedBreed =
-                                    newValue; // Aggiorna la razza selezionata
-                                updateSubBreeds(); // Aggiorna le sottorazze in base alla razza selezionata
+                                selectedBreed = newValue;
+                                updateSubBreeds();
                               });
                             },
                           ),
                           const SizedBox(height: 20),
+                          // Sub breed dropdown
                           DropdownWithTitle(
                             title: Dictionary.search_card_subbreed,
                             selectedValue: selectedSubBreed,
                             items: subbreeds,
                             onChanged: (newValue) {
                               setState(() {
-                                selectedSubBreed =
-                                    newValue; // Aggiorna il valore selezionato
+                                selectedSubBreed = newValue;
                               });
                             },
                           ),
@@ -182,7 +187,7 @@ class _SearchCardState extends ConsumerState<SearchCard> {
               value: useFavoriteList,
               onChanged: (newValue) {
                 if (newValue && favoritesLists.isEmpty) {
-                  // Mostra il SnackBar se la lista è vuota
+                  // Snackbar message if no lists are available
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
@@ -190,23 +195,24 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                       duration: const Duration(seconds: 2),
                     ),
                   );
-                  return; // Non aggiorna il valore dello switch
+                  return; // Don't change switch value if no lists are available
                 }
 
-                // Aggiorna lo stato dello switch se la lista non è vuota
+                // Update switch value if there is at least one favorites list
                 setState(() {
                   useFavoriteList = newValue;
                 });
               },
             ),
             const SizedBox(height: 10),
+            // Random switch available only if use favorites list switch is false
             !useFavoriteList
                 ? SwitchWithTitle(
                     title: Dictionary.search_card_random_images_switch,
                     value: randomImages,
                     onChanged: (newValue) {
                       setState(() {
-                        randomImages = newValue; // Aggiorna lo stato del switch
+                        randomImages = newValue;
                       });
                     },
                   )
@@ -229,8 +235,7 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                       )),
                       backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(50), // Rende il bordo rotondo
+                        borderRadius: BorderRadius.circular(50),
                       ),
                       child: Icon(
                         Icons.search,

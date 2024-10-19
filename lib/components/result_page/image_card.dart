@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:html' as html;
 
+// Item of images result list
 class ImageCard extends StatefulWidget {
-  final String imageUrl;
+  final String imageUrl; // Url of image
 
   const ImageCard({super.key, required this.imageUrl});
 
@@ -22,6 +23,7 @@ class _ImageCardState extends State<ImageCard> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
+    // Open image externally
     Future<void> openImage(String imageUrl) async {
       try {
         final anchor = html.AnchorElement(href: imageUrl)
@@ -30,6 +32,7 @@ class _ImageCardState extends State<ImageCard> {
           ..click();
         anchor.remove();
       } catch (e) {
+        // Error opening image
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(Dictionary.open_image_snackbar_error_message)),
         );
@@ -54,17 +57,17 @@ class _ImageCardState extends State<ImageCard> {
                     )
                   : Container()),
         ),
-        // Actual image
+        // Image
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Image.network(
             widget.imageUrl,
             width: screenWidth,
-            height: 250, // Altezza fissa
+            height: 250,
             fit: BoxFit.cover,
             loadingBuilder: (context, child, loadingProgress) {
+              // Loading image logic
               if (loadingProgress == null) {
-                // Se loadingProgress è null, significa che l'immagine è stata caricata.
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (mounted) {
                     setState(() {
@@ -72,21 +75,20 @@ class _ImageCardState extends State<ImageCard> {
                     });
                   }
                 });
-                return child; // Mostra l'immagine caricata
+                return child; // Show image
               } else {
-                // L'immagine è ancora in caricamento
+                // Image is still loading
                 return SizedBox(
                   width: screenWidth,
                   height: 250,
                   child: const Center(
-                    child:
-                        CircularProgressIndicator(), // Mostra un indicatore di caricamento
+                    child: CircularProgressIndicator(), // Loading indicator
                   ),
                 );
               }
             },
             errorBuilder: (context, error, stackTrace) {
-              // Gestione dell'errore
+              // Error loading image
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) {
                   setState(() {
@@ -97,8 +99,7 @@ class _ImageCardState extends State<ImageCard> {
               return Container(
                 width: screenWidth,
                 height: 250,
-                color: Colors
-                    .grey[300], // Sfondo per il fallimento del caricamento
+                color: Colors.grey[300],
                 child: const Center(
                   child: Icon(
                     Icons.error_outline,
@@ -110,7 +111,7 @@ class _ImageCardState extends State<ImageCard> {
             },
           ),
         ),
-        // Download button
+        // Open image button
         Positioned(
           bottom: 10,
           right: 0,
