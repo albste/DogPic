@@ -62,3 +62,19 @@ https://dog.ceo/dog-api/documentation/
 ## Markup
 
 You can find the project markup in the DogPic_Markup.svg file in the root of the project. During the development phase some components have changed and differ from how they were initially in the markup.
+
+## Project structure
+
+In the `lib` folder, you will find the main project code files. Inside `lib`, there is an `assets` folder containing the images (SVG files) used in the app. Additionally, you can find a `components` folder, which includes all the individual components used within the UI. These components are organized either by the page they belong to or by general components used throughout different parts of the app.
+
+The `models` folder contains the classes defining the models used in the project, while the `pages` folder holds the individual pages and the `PageContainer`, which acts as the parent for all pages. In the `utils` folder, you will find classes, strings, and static elements (such as the dictionary) that configure the project.
+
+At the root of the `lib` folder, you'll also find the `main.dart` file, which is the entry point of the app and the first file executed upon launch.
+
+#### API Management
+
+API calls are structured across three main directories:
+
+- **providers**: Contains the providers and notifiers responsible for state management and API interaction.
+- **repositories**: Houses the logic for data retrieval and manipulation, serving as an intermediary between services and providers.
+- **services**: Contains classes that handle direct communication with the API endpoints.
