@@ -1,7 +1,10 @@
 import 'package:dogpic/components/general/dropdown_with_title.dart';
 import 'package:dogpic/components/general/switch_with_title.dart';
+import 'package:dogpic/components/home_page/favorites_list_selector.dart';
 import 'package:dogpic/models/dog_breed_model.dart';
+import 'package:dogpic/models/favorites_list_model.dart';
 import 'package:dogpic/models/search_settings_model.dart';
+import 'package:dogpic/providers/favorites_notifier.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:dogpic/utils/dictionary.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +19,7 @@ class SearchCard extends ConsumerStatefulWidget {
   final Function(SearchSettingsModel) onSearch;
 
   const SearchCard({
+    super.key,
     required this.width,
     required this.onSearch,
     required this.isSearching,
@@ -31,13 +35,11 @@ class _SearchCardState extends ConsumerState<SearchCard> {
   bool switchAnimationEnabled = false;
   String? selectedBreed;
   String? selectedSubBreed;
-  String? favoriteList;
+  FavoritesListModel? favoriteListToUse;
 
   // Inizialmente vuoti, saranno popolati dal provider
   List<DogBreedModel> breeds = [];
   List<String> subbreeds = [];
-
-  final List<String> favoriteLists = ['List 1', 'List 2', 'List 3'];
 
   @override
   void initState() {
@@ -76,11 +78,14 @@ class _SearchCardState extends ConsumerState<SearchCard> {
 
   @override
   Widget build(BuildContext context) {
-    // final favoritesLists = ref.watch(favoritesProvider);
+    final favoritesLists = ref.watch(favoritesProvider);
+    if (favoritesLists.isNotEmpty && favoriteListToUse == null) {
+      favoriteListToUse = favoritesLists[0]; // Preseleziona il primo elemento
+    }
 
     return Container(
       width: widget.width,
-      padding: EdgeInsets.all(7),
+      padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
@@ -89,7 +94,7 @@ class _SearchCardState extends ConsumerState<SearchCard> {
             color: Colors.black.withOpacity(0.11),
             spreadRadius: 5,
             blurRadius: 20,
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
           ),
         ],
       ),
@@ -104,7 +109,7 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                   'lib/assets/svgs/dogpic_only_image_dark.svg',
                   height: 40,
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(
                   Dictionary.search_card_title,
                   style: GoogleFonts.openSans(
@@ -131,13 +136,13 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                 duration:
                     Duration(milliseconds: switchAnimationEnabled ? 300 : 0),
                 child: useFavoriteList
-                    ? DropdownWithTitle(
+                    ? FavoritesListSelector(
                         title: Dictionary.search_card_favorite_list,
-                        selectedValue: favoriteList,
-                        items: favoriteLists,
+                        selectedValue: favoriteListToUse,
+                        items: favoritesLists,
                         onChanged: (newValue) {
                           setState(() {
-                            favoriteList =
+                            favoriteListToUse =
                                 newValue; // Aggiorna il valore selezionato
                           });
                         },
@@ -156,7 +161,7 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                               });
                             },
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           DropdownWithTitle(
                             title: Dictionary.search_card_subbreed,
                             selectedValue: selectedSubBreed,
@@ -170,18 +175,31 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                           ),
                         ],
                       )),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Use Favorite List Switch
             SwitchWithTitle(
               title: Dictionary.search_card_favorite_list_switch,
               value: useFavoriteList,
               onChanged: (newValue) {
+                if (newValue && favoritesLists.isEmpty) {
+                  // Mostra il SnackBar se la lista è vuota
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          Dictionary.empty_favorites_list_snackbar_message),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                  return; // Non aggiorna il valore dello switch
+                }
+
+                // Aggiorna lo stato dello switch se la lista non è vuota
                 setState(() {
-                  useFavoriteList = newValue; // Aggiorna lo stato del switch
+                  useFavoriteList = newValue;
                 });
               },
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             !useFavoriteList
                 ? SwitchWithTitle(
                     title: Dictionary.search_card_random_images_switch,
@@ -192,8 +210,8 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                       });
                     },
                   )
-                : SizedBox(height: 5),
-            SizedBox(height: 30),
+                : const SizedBox(height: 5),
+            const SizedBox(height: 30),
             // Search Button
             Align(
               alignment: Alignment.centerRight,
@@ -206,17 +224,18 @@ class _SearchCardState extends ConsumerState<SearchCard> {
                         breed: selectedBreed!,
                         subBreed: selectedSubBreed!,
                         useFavoriteList: useFavoriteList,
+                        favoriteListToUse: favoriteListToUse,
                         randomImages: randomImages,
                       )),
                       backgroundColor: AppColors.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(50), // Rende il bordo rotondo
+                      ),
                       child: Icon(
                         Icons.search,
                         size: 30,
                         color: AppColors.secondaryForeground,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(50), // Rende il bordo rotondo
                       ),
                     ),
             ),

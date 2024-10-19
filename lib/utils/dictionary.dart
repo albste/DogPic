@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 class Dictionary {
   static String home = "Home";
   static String favorites = "Favorites";
@@ -7,8 +9,12 @@ class Dictionary {
   static String search_card_favorite_list = "Favorite list to use";
   static String search_card_favorite_list_switch = "Use a favorite list";
   static String search_card_random_images_switch = "Random image";
+  static String empty_favorites_list_snackbar_message =
+      "Please add a list firts!";
   static String result_page_title = "Search results:";
   static String result_page_new_search_button = "New search";
+  static String open_image_snackbar_error_message =
+      "Error opening image\'s url.";
   static String favorites_page_title = "Favorites Lists:";
   static String favorites_page_empty_list_message =
       "No list added. Please create one";

@@ -14,7 +14,8 @@ class EditFavoritesListDialog extends ConsumerStatefulWidget {
   final String initialTitle; // Aggiunto
   final List<int> initialBreedIds; // Aggiunto
 
-  EditFavoritesListDialog({
+  const EditFavoritesListDialog({
+    super.key,
     required this.listHeight,
     required this.onEdit,
     required this.initialTitle, // Aggiunto
@@ -28,9 +29,8 @@ class EditFavoritesListDialog extends ConsumerStatefulWidget {
 
 class _EditFavoritesListDialogState
     extends ConsumerState<EditFavoritesListDialog> {
-  String _selectedTitle = '';
-  List<int> _selectedBreedIds = [];
-  final ScrollController _scrollController = ScrollController();
+  String selectedTitle = '';
+  List<int> selectedBreedIds = [];
   List<DogBreedModel> breeds = [];
 
   @override
@@ -39,8 +39,8 @@ class _EditFavoritesListDialogState
     // Carica le razze all'avvio
     loadBreeds();
     // Inizializza il titolo e la lista di ID selezionati
-    _selectedTitle = widget.initialTitle; // Aggiunto
-    _selectedBreedIds = List.from(widget.initialBreedIds); // Aggiunto
+    selectedTitle = widget.initialTitle; // Aggiunto
+    selectedBreedIds = List.from(widget.initialBreedIds); // Aggiunto
   }
 
   Future<void> loadBreeds() async {
@@ -55,7 +55,7 @@ class _EditFavoritesListDialogState
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final double cardWidth =
-        SizeCalculator.LargeContainerWidthCalculator(screenWidth) - 40;
+        SizeCalculator.largeContainerWidthCalculator(screenWidth) - 40;
 
     return Container(
       width: cardWidth,
@@ -73,28 +73,28 @@ class _EditFavoritesListDialogState
                   color: AppColors.primaryForeground,
                 ),
               )),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           FavoritesListForm(
-            selectedTitle: _selectedTitle,
+            selectedTitle: selectedTitle,
             onTitleChanged: (title) {
               setState(() {
-                _selectedTitle = title;
+                selectedTitle = title;
               });
             },
             breeds: breeds,
-            selectedBreedIds: _selectedBreedIds,
+            selectedBreedIds: selectedBreedIds,
             onBreedSelected: (id, isSelected) {
               setState(() {
-                if (isSelected ?? false) {
-                  _selectedBreedIds.add(id);
+                if (isSelected) {
+                  selectedBreedIds.add(id);
                 } else {
-                  _selectedBreedIds.remove(id);
+                  selectedBreedIds.remove(id);
                 }
               });
             },
             listHeight: widget.listHeight,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -115,14 +115,14 @@ class _EditFavoritesListDialogState
                       )),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: TextButton(
                   onPressed:
-                      _selectedTitle.isNotEmpty && _selectedBreedIds.isNotEmpty
+                      selectedTitle.isNotEmpty && selectedBreedIds.isNotEmpty
                           ? () {
-                              widget.onEdit(_selectedTitle, _selectedBreedIds);
+                              widget.onEdit(selectedTitle, selectedBreedIds);
                               Navigator.of(context).pop(); // Close on save
                             }
                           : null,
@@ -132,8 +132,8 @@ class _EditFavoritesListDialogState
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
-                          color: _selectedTitle.isNotEmpty &&
-                                  _selectedBreedIds.isNotEmpty
+                          color: selectedTitle.isNotEmpty &&
+                                  selectedBreedIds.isNotEmpty
                               ? AppColors.primaryForeground
                               : AppColors.primaryForeground.withOpacity(0.5),
                         ),

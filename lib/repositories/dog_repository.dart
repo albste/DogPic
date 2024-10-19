@@ -22,10 +22,6 @@ class DogRepository {
     return breed.subBreeds;
   }
 
-  Future<String> fetchRandomImage(String breedName) async {
-    return await dogService.fetchRandomImage(breedName);
-  }
-
   Future<List<String>> fetchImagesByBreed(String breedName) async {
     return await dogService.fetchImagesByBreed(breedName);
   }
@@ -33,6 +29,10 @@ class DogRepository {
   Future<List<String>> fetchImagesBySubBreed(
       String breedName, String subBreedName) async {
     return await dogService.fetchImagesBySubBreed(breedName, subBreedName);
+  }
+
+  Future<String> fetchRandomImage(String breedName) async {
+    return await dogService.fetchRandomImage(breedName);
   }
 
   Future<String> fetchRandomImageBySubBreed(

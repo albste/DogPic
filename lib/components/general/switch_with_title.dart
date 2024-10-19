@@ -8,11 +8,11 @@ class SwitchWithTitle extends StatelessWidget {
   final ValueChanged<bool> onChanged; // Callback per il cambiamento dello stato
 
   const SwitchWithTitle({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

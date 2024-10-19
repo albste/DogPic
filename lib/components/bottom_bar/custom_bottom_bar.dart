@@ -10,10 +10,10 @@ class CustomBottomBar extends StatelessWidget {
   final Function(int) onItemSelected;
 
   const CustomBottomBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onItemSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class CustomBottomBar extends StatelessWidget {
 
     // Calculate the maximum available width for the bottom bar
     final double barWidth =
-        SizeCalculator.LargeContainerWidthCalculator(screenWidth);
+        SizeCalculator.largeContainerWidthCalculator(screenWidth);
 
     // Calculate dynamic margins based on the width
     final double sideMargin = (screenWidth - barWidth) / 2;
@@ -39,11 +39,11 @@ class CustomBottomBar extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.1), // Slightly lighter shadow
             blurRadius: 20, // Spread of the shadow
-            offset: Offset(0, 2), // Offset to move the shadow down
+            offset: const Offset(0, 2), // Offset to move the shadow down
           ),
         ],
       ),
-      child: Container(
+      child: SizedBox(
         width: barWidth, // Calculated width
         child: ClipRRect(
           borderRadius: BorderRadius.circular(40), // Rounded corners
@@ -53,12 +53,12 @@ class CustomBottomBar extends StatelessWidget {
             showElevation: false,
             onItemSelected: onItemSelected, // Selection event
             items: [
-              _buildTabItem(
+              buildTabItem(
                 icon: Icons.home_outlined,
                 title: Dictionary.home,
                 index: 0,
               ),
-              _buildTabItem(
+              buildTabItem(
                 icon: Icons.favorite_outline,
                 title: Dictionary.favorites,
                 index: 1,
@@ -70,7 +70,7 @@ class CustomBottomBar extends StatelessWidget {
     );
   }
 
-  FlashyTabBarItem _buildTabItem(
+  FlashyTabBarItem buildTabItem(
       {required IconData icon, required String title, required int index}) {
     return FlashyTabBarItem(
       activeColor: AppColors.primary,

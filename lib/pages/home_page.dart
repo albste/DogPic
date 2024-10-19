@@ -1,6 +1,7 @@
 import 'package:dogpic/components/home_page/search_card.dart';
 import 'package:dogpic/components/home_page/top_rectangle.dart';
 import 'package:dogpic/models/search_settings_model.dart';
+import 'package:dogpic/providers/breed_notifier.dart';
 import 'package:dogpic/providers/dog_providers.dart';
 import 'package:dogpic/utils/colors.dart';
 import 'package:dogpic/utils/size_calculator.dart';
@@ -9,60 +10,71 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'result_page.dart'; // Import the ResultPage
 
 class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  bool _showResultPage = false; // Flag to control the displayed content
-  bool _isSearching = false; // Flag to control if search is loading
-  List<String> _resultUrls = [];
+  bool showResultPage = false; // Flag to control the displayed content
+  bool isSearching = false; // Flag to control if search is loading
+  List<String> resultUrls = [];
 
-  void _onSearch(SearchSettingsModel searchSettings) async {
+  void onSearch(SearchSettingsModel searchSettings) async {
     setState(() {
-      _isSearching = true;
+      isSearching = true;
     });
 
     //Search logics
-    List<String> resultUrls = [];
+    List<String> tmpResultUrls = [];
     try {
-      if (searchSettings.useFavoriteList) {
+      if (searchSettings.useFavoriteList &&
+          searchSettings.favoriteListToUse != null) {
+        final breedList = ref.read(breedNotifierProvider);
+        List<String> selectedBreedNames = searchSettings
+            .favoriteListToUse!.selectedBreedIds
+            .map((id) => breedList.firstWhere((breed) => breed.id == id).name)
+            .where((name) => name.isNotEmpty) // Filtra i nomi vuoti
+            .toList();
+        final urls = await ref
+            .read(randomImagesByBreedsProvider(selectedBreedNames).future);
+        tmpResultUrls = urls;
       } else {
         if (searchSettings.randomImages) {
           if (searchSettings.subBreed == 'All sub breeds') {
             // Chiamata per ottenere le immagini in base alla razza
             final url = await ref
                 .read(randomImageProvider(searchSettings.breed).future);
-            resultUrls = [url];
+            tmpResultUrls = [url];
           } else {
             // Chiamata per ottenere un'immagine casuale in base alla razza e sottorazza
             final url = await ref.read(randomImageBySubBreedProvider(
                 [searchSettings.breed, searchSettings.subBreed]).future);
-            resultUrls = [url]; // Mettiamo l'URL in una lista
+            tmpResultUrls = [url]; // Mettiamo l'URL in una lista
           }
         } else {
           if (searchSettings.subBreed == 'All sub breeds') {
             // Chiamata per ottenere le immagini in base alla razza
             final urls = await ref
                 .read(imagesByBreedProvider(searchSettings.breed).future);
-            resultUrls = urls;
+            tmpResultUrls = urls;
           } else {
             // Chiamata per ottenere un'immagine casuale in base alla razza e sottorazza
             final urls = await ref.read(imagesBySubBreedProvider(
                 [searchSettings.breed, searchSettings.subBreed]).future);
-            resultUrls = urls;
+            tmpResultUrls = urls;
           }
         }
       }
     } catch (e) {
-      print('Error fetching images: $e');
-      resultUrls = []; // Imposta a vuoto in caso di errore
+      tmpResultUrls = []; // Imposta a vuoto in caso di errore
     }
 
     setState(() {
-      _resultUrls = resultUrls;
-      _isSearching = false;
-      _showResultPage = true; // Change the flag to show Result Page
+      resultUrls = tmpResultUrls;
+      isSearching = false;
+      showResultPage = true; // Change the flag to show Result Page
     });
   }
 
@@ -77,18 +89,18 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     // Set the max width for the card
     final double cardWidth =
-        SizeCalculator.LargeContainerWidthCalculator(screenWidth);
+        SizeCalculator.largeContainerWidthCalculator(screenWidth);
 
     return Scaffold(
         appBar: null,
         backgroundColor: AppColors.pageBackground,
-        body: _showResultPage
+        body: showResultPage
             ? Center(
                 child: ResultPage(
-                    resultUrls: _resultUrls,
+                    resultUrls: resultUrls,
                     onGoHome: () {
                       setState(() {
-                        _showResultPage =
+                        showResultPage =
                             false; // Change the flag to show HomePage
                       });
                     })) // Pass the callback to go back to HomePage
@@ -108,11 +120,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                           children: [
                             SearchCard(
                               width: cardWidth,
-                              isSearching: _isSearching,
-                              onSearch: _onSearch,
+                              isSearching: isSearching,
+                              onSearch: onSearch,
                             ),
                             //Box to leave empty space on bottom of the page
-                            SizedBox(height: 170)
+                            const SizedBox(height: 170)
                           ],
                         )),
                   ],

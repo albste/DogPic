@@ -9,8 +9,11 @@ class FavoritesListItem extends StatefulWidget {
   final FavoritesListModel item;
   final Function(FavoritesListModel) onEdit;
   final Function(int) onDelete;
-  FavoritesListItem(
-      {required this.item, required this.onEdit, required this.onDelete});
+  const FavoritesListItem(
+      {super.key,
+      required this.item,
+      required this.onEdit,
+      required this.onDelete});
 
   @override
   _FavoritesListItemState createState() => _FavoritesListItemState();
@@ -30,7 +33,7 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
               color: Colors.black.withOpacity(0.11),
               spreadRadius: 0,
               blurRadius: 5,
-              offset: Offset(0, 0),
+              offset: const Offset(0, 0),
             ),
           ],
         ),
@@ -49,8 +52,7 @@ class _FavoritesListItemState extends State<FavoritesListItem> {
                 ),
               )),
           subtitle: Text(
-              '${widget.item.selectedBreedIds.length} ' +
-                  Dictionary.favorites_page_breeds_selected,
+              '${widget.item.selectedBreedIds.length} ${Dictionary.favorites_page_breeds_selected}',
               style: GoogleFonts.openSans(
                 textStyle: TextStyle(
                   decoration: TextDecoration.none,

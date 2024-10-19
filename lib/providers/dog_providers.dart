@@ -1,7 +1,5 @@
 import 'package:dogpic/models/dog_breed_model.dart';
 import 'package:dogpic/models/dog_subbreed_model.dart';
-import 'package:dogpic/models/favorites_list_model.dart';
-import 'package:dogpic/providers/favorites_notifier.dart';
 import 'package:dogpic/repositories/dog_repository.dart';
 import 'package:dogpic/services/api_client.dart';
 import 'package:dogpic/services/dog_service.dart';
@@ -24,23 +22,9 @@ final dogSubBreedsProvider =
   return ref.watch(dogRepositoryProvider).fetchSubBreedsForBreed(breed);
 });
 
-final randomImageProvider =
-    FutureProvider.family<String, String>((ref, breedName) async {
-  return ref.watch(dogRepositoryProvider).fetchRandomImage(breedName);
-});
-
 final imagesByBreedProvider =
     FutureProvider.family<List<String>, String>((ref, breedName) async {
   return ref.watch(dogRepositoryProvider).fetchImagesByBreed(breedName);
-});
-
-final randomImageBySubBreedProvider =
-    FutureProvider.family<String, List<String>>((ref, params) async {
-  final breedName = params[0];
-  final subBreedName = params[1];
-  return ref
-      .watch(dogRepositoryProvider)
-      .fetchRandomImageBySubBreed(breedName, subBreedName);
 });
 
 final imagesBySubBreedProvider =
@@ -50,6 +34,20 @@ final imagesBySubBreedProvider =
   return ref
       .watch(dogRepositoryProvider)
       .fetchImagesBySubBreed(breedName, subBreedName);
+});
+
+final randomImageProvider =
+    FutureProvider.family<String, String>((ref, breedName) async {
+  return ref.watch(dogRepositoryProvider).fetchRandomImage(breedName);
+});
+
+final randomImageBySubBreedProvider =
+    FutureProvider.family<String, List<String>>((ref, params) async {
+  final breedName = params[0];
+  final subBreedName = params[1];
+  return ref
+      .watch(dogRepositoryProvider)
+      .fetchRandomImageBySubBreed(breedName, subBreedName);
 });
 
 final randomImagesByBreedsProvider =

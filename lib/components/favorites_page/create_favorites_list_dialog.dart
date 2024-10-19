@@ -12,7 +12,8 @@ class CreateFavoritesListDialog extends ConsumerStatefulWidget {
   final double listHeight;
   final Function(String title, List<int> breedsIds) onCreate;
 
-  CreateFavoritesListDialog({
+  const CreateFavoritesListDialog({
+    super.key,
     required this.listHeight,
     required this.onCreate,
   });
@@ -24,9 +25,8 @@ class CreateFavoritesListDialog extends ConsumerStatefulWidget {
 
 class _CreateFavoritesListDialogState
     extends ConsumerState<CreateFavoritesListDialog> {
-  String _selectedTitle = '';
-  List<int> _selectedBreedIds = [];
-  final ScrollController _scrollController = ScrollController();
+  String selectedTitle = '';
+  List<int> selectedBreedIds = [];
   List<DogBreedModel> breeds = [];
 
   @override
@@ -48,7 +48,7 @@ class _CreateFavoritesListDialogState
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final double cardWidth =
-        SizeCalculator.LargeContainerWidthCalculator(screenWidth) - 40;
+        SizeCalculator.largeContainerWidthCalculator(screenWidth) - 40;
 
     return Container(
       width: cardWidth,
@@ -66,28 +66,28 @@ class _CreateFavoritesListDialogState
                   color: AppColors.primaryForeground,
                 ),
               )),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           FavoritesListForm(
-            selectedTitle: _selectedTitle,
+            selectedTitle: selectedTitle,
             onTitleChanged: (title) {
               setState(() {
-                _selectedTitle = title;
+                selectedTitle = title;
               });
             },
             breeds: breeds,
-            selectedBreedIds: _selectedBreedIds,
+            selectedBreedIds: selectedBreedIds,
             onBreedSelected: (id, isSelected) {
               setState(() {
-                if (isSelected ?? false) {
-                  _selectedBreedIds.add(id);
+                if (isSelected) {
+                  selectedBreedIds.add(id);
                 } else {
-                  _selectedBreedIds.remove(id);
+                  selectedBreedIds.remove(id);
                 }
               });
             },
             listHeight: widget.listHeight,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -108,25 +108,25 @@ class _CreateFavoritesListDialogState
                       )),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: TextButton(
-                  onPressed: _selectedTitle.isNotEmpty &&
-                          _selectedBreedIds.isNotEmpty
-                      ? () {
-                          widget.onCreate(_selectedTitle, _selectedBreedIds);
-                          Navigator.of(context).pop(); // Close on save
-                        }
-                      : null,
+                  onPressed:
+                      selectedTitle.isNotEmpty && selectedBreedIds.isNotEmpty
+                          ? () {
+                              widget.onCreate(selectedTitle, selectedBreedIds);
+                              Navigator.of(context).pop(); // Close on save
+                            }
+                          : null,
                   child: Text(Dictionary.save,
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
-                          color: _selectedTitle.isNotEmpty &&
-                                  _selectedBreedIds.isNotEmpty
+                          color: selectedTitle.isNotEmpty &&
+                                  selectedBreedIds.isNotEmpty
                               ? AppColors.primaryForeground
                               : AppColors.primaryForeground.withOpacity(0.5),
                         ),

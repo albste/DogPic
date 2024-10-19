@@ -4,16 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class FavoritesNotifier extends StateNotifier<List<FavoritesListModel>> {
   FavoritesNotifier() : super([]);
 
-  int _currentId = 0; // ID univoco crescente
+  int currentId = 0; // ID univoco crescente
 
   List<FavoritesListModel> get favoritesList =>
       state; // Read all favoritesLists
 
   // Aggiungi un nuovo elemento alla lista
   void addFavorite(String title, List<int> selectedBreedIds) {
-    _currentId++;
+    currentId++;
     final newFavorite = FavoritesListModel(
-      id: _currentId,
+      id: currentId,
       title: title,
       selectedBreedIds: selectedBreedIds,
     );

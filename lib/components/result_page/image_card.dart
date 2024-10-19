@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'package:dogpic/utils/colors.dart';
+import 'package:dogpic/utils/dictionary.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:html' as html;
@@ -6,7 +9,7 @@ import 'dart:html' as html;
 class ImageCard extends StatefulWidget {
   final String imageUrl;
 
-  const ImageCard({required this.imageUrl});
+  const ImageCard({super.key, required this.imageUrl});
 
   @override
   _ImageCardState createState() => _ImageCardState();
@@ -19,7 +22,7 @@ class _ImageCardState extends State<ImageCard> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    Future<void> _openImage(String imageUrl) async {
+    Future<void> openImage(String imageUrl) async {
       try {
         final anchor = html.AnchorElement(href: imageUrl)
           ..setAttribute('download', 'downloaded_image.jpg')
@@ -28,7 +31,7 @@ class _ImageCardState extends State<ImageCard> {
         anchor.remove();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error opening image\'s url.')),
+          SnackBar(content: Text(Dictionary.open_image_snackbar_error_message)),
         );
       }
     }
@@ -75,7 +78,7 @@ class _ImageCardState extends State<ImageCard> {
                 return SizedBox(
                   width: screenWidth,
                   height: 250,
-                  child: Center(
+                  child: const Center(
                     child:
                         CircularProgressIndicator(), // Mostra un indicatore di caricamento
                   ),
@@ -96,7 +99,7 @@ class _ImageCardState extends State<ImageCard> {
                 height: 250,
                 color: Colors
                     .grey[300], // Sfondo per il fallimento del caricamento
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Icons.error_outline,
                     color: Colors.red,
@@ -113,16 +116,16 @@ class _ImageCardState extends State<ImageCard> {
           right: 0,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(8),
-              shape: CircleBorder(),
+              padding: const EdgeInsets.all(8),
+              shape: const CircleBorder(),
               backgroundColor: _isLoading ? Colors.grey : AppColors.primary,
             ),
             onPressed: _isLoading
                 ? null
                 : () {
-                    _openImage(widget.imageUrl);
+                    openImage(widget.imageUrl);
                   },
-            child: Icon(Icons.open_in_new, color: Colors.white),
+            child: const Icon(Icons.open_in_new, color: Colors.white),
           ),
         ),
       ],

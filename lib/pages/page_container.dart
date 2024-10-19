@@ -7,25 +7,27 @@ import 'package:dogpic/utils/colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PageContainer extends ConsumerStatefulWidget {
+  const PageContainer({super.key});
+
   @override
   _PageContainerState createState() => _PageContainerState();
 }
 
 class _PageContainerState extends ConsumerState<PageContainer> {
-  int _selectedIndex = 0;
+  int selectedIndex = 0;
 
   // Main Pages
-  final List<Widget> _pages = [
+  final List<Widget> pages = [
     HomePage(),
     FavoritesPage(),
   ];
 
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) {
+  void onItemTapped(int index) {
+    if (index == selectedIndex) {
       return; // If the item is already selected, do nothing
     }
     setState(() {
-      _selectedIndex = index; // Update the selected index
+      selectedIndex = index; // Update the selected index
     });
   }
 
@@ -45,21 +47,21 @@ class _PageContainerState extends ConsumerState<PageContainer> {
     return Scaffold(
       appBar: null, // Remove appbar
       body: breeds.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : AnimatedSwitcher(
-              duration: Duration(milliseconds: 250), // Animation duration
+              duration: const Duration(milliseconds: 250), // Animation duration
               transitionBuilder: (Widget child, Animation<double> animation) {
                 return FadeTransition(
                   opacity: animation, // Apply fade transition
                   child: child,
                 );
               },
-              child: _pages[_selectedIndex], // Display the selected page
+              child: pages[selectedIndex], // Display the selected page
             ),
       backgroundColor: AppColors.pageBackground,
       bottomNavigationBar: CustomBottomBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _onItemTapped,
+        selectedIndex: selectedIndex,
+        onItemSelected: onItemTapped,
       ),
     );
   }

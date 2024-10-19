@@ -1,7 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:dogpic/utils/settings.dart';
 
 class SizeCalculator {
-  static double LargeContainerWidthCalculator(double screenWidth) {
+  static double largeContainerWidthCalculator(double screenWidth) {
     final double containerWidth = screenWidth > Settings.maxComponentsWidth
         ? Settings.maxComponentsWidth
         : screenWidth -

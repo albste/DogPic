@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; // Assicurati di avere la dipendenza di google_fonts nel tuo pubspec.yaml
+import 'package:google_fonts/google_fonts.dart';
 import 'package:dogpic/utils/colors.dart'; // Modifica in base alla tua struttura dei pacchetti
+import 'package:dogpic/models/favorites_list_model.dart'; // Assicurati di importare il tuo modello
 
-class DropdownWithTitle extends StatelessWidget {
+class FavoritesListSelector extends StatelessWidget {
   final String title; // Titolo del dropdown
-  final String? selectedValue; // Valore selezionato
-  final List<String> items; // Lista di elementi del dropdown
-  final ValueChanged<String?>
+  final FavoritesListModel? selectedValue; // Oggetto selezionato
+  final List<FavoritesListModel> items; // Lista di elementi del dropdown
+  final ValueChanged<FavoritesListModel?>
       onChanged; // Callback per il cambiamento della selezione
 
-  const DropdownWithTitle({
+  const FavoritesListSelector({
     super.key,
     required this.title,
     required this.selectedValue,
@@ -36,9 +37,11 @@ class DropdownWithTitle extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         // Dropdown
-        DropdownButtonFormField<String>(
+        DropdownButtonFormField<FavoritesListModel?>(
           value: selectedValue,
-          onChanged: onChanged,
+          onChanged: (FavoritesListModel? newValue) {
+            onChanged(newValue);
+          },
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 15),
             border: OutlineInputBorder(
@@ -76,11 +79,12 @@ class DropdownWithTitle extends StatelessWidget {
               color: AppColors.primaryForeground,
             ),
           ),
-          items: items.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
+          items: items.map<DropdownMenuItem<FavoritesListModel>>(
+              (FavoritesListModel item) {
+            return DropdownMenuItem<FavoritesListModel>(
+              value: item,
               child: Text(
-                value,
+                item.title, // Mostra il titolo
                 style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                     decoration: TextDecoration.none,

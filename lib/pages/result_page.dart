@@ -9,15 +9,16 @@ class ResultPage extends StatelessWidget {
   final List<String> resultUrls;
   final VoidCallback onGoHome;
 
-  ResultPage({required this.resultUrls, required this.onGoHome});
+  const ResultPage(
+      {super.key, required this.resultUrls, required this.onGoHome});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final double pageWidth =
-        SizeCalculator.LargeContainerWidthCalculator(screenWidth);
+        SizeCalculator.largeContainerWidthCalculator(screenWidth);
 
-    return Container(
+    return SizedBox(
       width: pageWidth,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +28,7 @@ class ResultPage extends StatelessWidget {
             child: Row(
               children: [
                 Icon(Icons.search, color: AppColors.primary, size: 30),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(Dictionary.result_page_title,
                     style: GoogleFonts.openSans(
                       textStyle: TextStyle(
@@ -40,7 +41,7 @@ class ResultPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(
             child: ListView.builder(
               itemCount: resultUrls.length,
@@ -53,7 +54,7 @@ class ResultPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 20),
+            padding: const EdgeInsets.only(top: 20, bottom: 20),
             child: Center(
               child: ElevatedButton(
                 onPressed: onGoHome,
@@ -62,7 +63,8 @@ class ResultPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
